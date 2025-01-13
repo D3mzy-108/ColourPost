@@ -1,0 +1,37 @@
+:root {
+    --highlight: #65B5A3;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: sans-serif !important;
+    color: #252525 !important;
+    font-weight: bold !important;
+}
+
+.w-screen {
+    width: 100vw !important;
+    width: 100dvw !important;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+.floating {
+    animation: float 5s ease-in-out infinite;
+}
