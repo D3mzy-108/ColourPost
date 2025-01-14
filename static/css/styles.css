@@ -2,6 +2,10 @@
     --highlight: #65B5A3;
 }
 
+* {
+    box-sizing: border-box;
+}
+
 h1,
 h2,
 h3,
@@ -13,6 +17,7 @@ h6 {
     font-weight: bold !important;
 }
 
+main,
 .w-screen {
     width: 100vw !important;
     width: 100dvw !important;

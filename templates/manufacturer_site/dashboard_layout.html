@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block main %}
 <div class="w-full flex">
     {% include './components/large_screen_nav.html' %}
 
-    <div class="w-full lg:w-4/5 min-h-[200vh]">
+    <div class="w-full lg:w-4/5 min-h-[100vh] pb-[12vh]">
         {% block content %}
 
         {% endblock content %}
@@ -12,3 +13,7 @@
 </div>
 {% include './components/floating_bottom_nav.html' %}
 {% endblock main %}
+
+{% block scripts %}
+<script src="{% static 'js/nav-utils/active-link.js' %}"></script>
+{% endblock scripts %}
