@@ -21,10 +21,10 @@ Login
 
         <form action="" method="post" class="mt-6">
             {% csrf_token %}
-            <input type="text" name="username" id="username"
-                class="w-full py-3 px-4 bg-gray-100 rounded-t-xl border border-b-none" placeholder="Username:">
-            <input type="text" name="password" id="password" class="w-full py-3 px-4 bg-gray-100 rounded-b-xl border"
-                placeholder="Password:">
+            <input type="text" name="username" id="username" value="{{username}}"
+                class="w-full py-3 px-4 bg-gray-100 rounded-t-xl border border-b-none" placeholder="Username:" required>
+            <input type="password" name="password" id="password"
+                class="w-full py-3 px-4 bg-gray-100 rounded-b-xl border" placeholder="Password:" required>
             <div class="w-full text-center mt-8 px-6">
                 <button type="submit" class="w-full py-3 text-white bg-[var(--highlight)] rounded-xl">Login</button>
             </div>

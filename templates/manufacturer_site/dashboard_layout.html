@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block main %}
+<div class="w-full flex">
+    {% include './components/large_screen_nav.html' %}
+
+    <div class="w-full lg:w-4/5 min-h-[200vh]">
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+</div>
+{% include './components/floating_bottom_nav.html' %}
+{% endblock main %}

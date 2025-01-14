@@ -1,0 +1,45 @@
+{% if messages %}
+<div class="w-full h-fit fixed top-4 left-0 z-50 grid place-items-center">
+    {% for message in messages %}
+    <div id="message{{forloop.counter}}"
+        class="message w-full max-w-xs md:max-w-sm bg-gray-300/50 backdrop-blur-md rounded-xl p-4 flex flex-col items-center gap-4 relative mx-auto">
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+        <iconify-icon icon="ix:success" width="32" height="32" class="text-green-500"></iconify-icon>
+        <div class="w-full text-center text-green-700">
+            <span>{{message}}</span>
+        </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+        <iconify-icon icon="material-symbols-light:error-outline" width="32" height="32"
+            class="text-blue-500"></iconify-icon>
+        <div class="w-full text-center text-blue-700">
+            <span>{{message}}</span>
+        </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+        <iconify-icon icon="material-symbols-light:error-outline" width="32" height="32"
+            class="text-orange-500"></iconify-icon>
+        <div class="w-full text-center text-orange-700">
+            <span>{{message}}</span>
+        </div>
+        {% elif message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+        <iconify-icon icon="material-symbols-light:error-outline" width="32" height="32"
+            class="text-red-500"></iconify-icon>
+        <div class="w-full text-center text-red-700">
+            <span>{{message}}</span>
+        </div>
+        {% endif %}
+        <button
+            class="bg-gray-200 grid place-items-center outline-none text-black close-msg text-[18px] p-1 rounded-full absolute top-2 right-2"
+            style="align-self: flex-start;" onclick="$(`#message{{forloop.counter}}`).fadeOut()">
+            <iconify-icon icon="material-symbols-light:close" width="20" height="20"></iconify-icon>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<script>
+    setTimeout(() => {
+        $(".message").fadeOut()
+    }, 20000)
+</script>
