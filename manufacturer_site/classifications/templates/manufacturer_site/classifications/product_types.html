@@ -1,0 +1,53 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+
+{% block title %}
+Product Types
+{% endblock title %}
+
+{% block content %}
+{% include './components/classification_nav.html' %}
+
+<div class="w-full px-4 py-4">
+    <div class="w-full flex items-center mb-4">
+        <div class="flex-1">
+            <h5 class="text-md">Product Types</h5>
+        </div>
+        <a href="" class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
+            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
+            <span>Create</span>
+        </a>
+    </div>
+    <table class="w-full table-auto rounded-xl overflow-hidden">
+        <thead>
+            <tr class="border-b border-b-black/40">
+                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Product Type</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product_type in product_types %}
+            <tr class="border-b border-b-black/20">
+                <th class="py-2 px-2 font-normal text-start w-[50px]">1</th>
+                <th class="py-2 px-2 font-normal text-start">----</th>
+                <th class="py-2 px-2 font-normal text-start">
+                    <a href=""
+                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700 ml-auto mr-4">
+                        <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                    </a>
+                </th>
+            </tr>
+            {% endfor %}
+            {% if not product_types %}
+            <tr class="border border-dashed border-black/20">
+                <td colspan="3" class="py-12 text-center text-gray-600">
+                    <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
+                    <br>
+                    No Product Types added
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

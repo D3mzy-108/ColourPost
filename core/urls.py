@@ -22,4 +22,6 @@ urlpatterns = [
     path('', include('client_site.urls')),
     path('auth/', include('auth_app.urls')),
     path('manufacturer/dashboard/', include('manufacturer_site.dashboard.urls')),
+    path('manufacturer/classifications/',
+         include('manufacturer_site.classifications.urls')),
 ]

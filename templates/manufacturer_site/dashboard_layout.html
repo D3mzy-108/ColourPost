@@ -6,9 +6,12 @@
     {% include './components/large_screen_nav.html' %}
 
     <div class="w-full lg:w-4/5 min-h-[100vh] pb-[12vh]">
-        {% block content %}
+        {% include './components/dashboard_header.html' %}
+        <div class="w-full px-4">
+            {% block content %}
 
-        {% endblock content %}
+            {% endblock content %}
+        </div>
     </div>
 </div>
 {% include './components/floating_bottom_nav.html' %}
