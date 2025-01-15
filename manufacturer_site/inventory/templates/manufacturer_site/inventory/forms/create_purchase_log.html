@@ -1,0 +1,74 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+Add Raw Materials
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'raw_materials' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_name">
+                Raw Material:
+                <br>
+                <span class="text-sm text-gray-600">
+                    Select the raw material being logged
+                </span>
+            </label>
+            {% if selected_material %}
+            <div class="py-1 px-2">
+                <h3 class="text-lg">
+                    {{selected_material.name}} - {{selected_material.code}}
+                </h3>
+            </div>
+            {% else %}
+            {{purchase_log_form.raw_material}}
+            {% endif %}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_name">
+                Quantity (kgs/lts):
+                <br>
+                <span class="text-sm text-gray-600">
+                    The quantity of the item purchased.
+                </span>
+            </label>
+            {{purchase_log_form.quantity}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_name">
+                Total Cost:
+                <br>
+                <span class="text-sm text-gray-600">
+                    The cost of the purchased item as a whole. The cost per kg/liter
+                    will be calculated by our algorithm based on the value provided.
+                </span>
+            </label>
+            {{purchase_log_form.ttl_cost}}
+        </div>
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    select {
+        font-size: large;
+        font-weight: 700;
+        width: fit-content;
+        padding: 0.25rem 0.5rem;
+    }
+</style>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}

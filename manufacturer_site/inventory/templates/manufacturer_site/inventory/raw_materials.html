@@ -9,7 +9,14 @@ Raw Materials
 
 <div class="w-full px-2 md:px-4 py-4">
     <div class="w-full mb-8">
-        <legend class="text-md font-semibold">Low Stock</legend>
+        <div class="flex items-center">
+            <legend class="text-md font-semibold">Low Stock</legend>
+
+            <a href="{% url 'material_purchase_log' %}" class="text-blue-700 flex gap-2 w-fit items-center ml-auto">
+                <span>Purchase Logs</span>
+                <span class="text-lg">&raquo;</span>
+            </a>
+        </div>
 
         <table class="w-full table-auto rounded-xl overflow-hidden mt-4">
             <thead>
@@ -32,7 +39,7 @@ Raw Materials
                         {{material.quantity_in_stock}} {{material.measurement_unit}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start flex gap-2">
-                        <a href=""
+                        <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
                             class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
                             <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
                             <span class="text-sm">Restock</span>
@@ -98,7 +105,7 @@ Raw Materials
                     {{material.quantity_in_stock}} {{material.measurement_unit}}
                 </td>
                 <td class="py-2 px-2 font-normal text-start flex gap-2">
-                    <a href=""
+                    <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
                         class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
                         <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
                         <span class="text-sm">Restock</span>

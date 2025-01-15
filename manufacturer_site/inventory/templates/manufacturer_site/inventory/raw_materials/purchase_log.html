@@ -1,0 +1,65 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+Purchase Log Raw Materials
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <div class="w-full flex justify-between">
+        <a href="{% url 'raw_materials' %}"
+            class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+            <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+        </a>
+        <a href="{% url 'create_purchase_log' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center justify-center">
+            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
+            <span>Log Purchase</span>
+        </a>
+    </div>
+
+    <div class="mt-4 sm:mt-8 px-4 sm:px-8 w-full">
+        <table class="w-full table-auto rounded-xl overflow-hidden">
+            <thead>
+                <tr class="border-b border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Material</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Total Cost</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for purchase in material_purchases %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{purchase.raw_material}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{purchase.quantity}} {{purchase.raw_material.measurement_unit}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{purchase.ttl_cost}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{purchase.date}}
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not material_purchases %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="5" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Purchases Logged
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

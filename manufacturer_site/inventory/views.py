@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from .models import RawMaterial
+from .models import RawMaterial, MaterialPurchaseLog
 from django.db.models import Q
-from .forms import RawMaterialForm
+from .forms import RawMaterialForm, MaterialPurchaseLogForm
 from django.contrib import messages
 
 
@@ -64,3 +64,43 @@ def delete_raw_material(request):
         messages.error(
             request, 'Failed to identify material ID.')
     return redirect('raw_materials')
+
+
+@login_required
+def material_purchase_log(request):
+    material_purchases = MaterialPurchaseLog.objects.all().order_by('-date')
+    context = {
+        'material_purchases': material_purchases,
+    }
+    return render(request, 'manufacturer_site/inventory/raw_materials/purchase_log.html', context)
+
+
+@login_required
+def create_purchase_log(request):
+    material_id = request.GET.get('mid')
+    if material_id is not None:
+        selected_material = get_object_or_404(RawMaterial, id=material_id)
+    else:
+        selected_material = None
+
+    if request.method == 'POST':
+        if selected_material is not None:
+            instance = request.POST.copy()
+            instance.update({'raw_material': selected_material.id})
+            purchase_log_form = MaterialPurchaseLogForm(instance)
+        else:
+            purchase_log_form = MaterialPurchaseLogForm(request.POST)
+        if purchase_log_form.is_valid():
+            purchase_log_form.save()
+            messages.success(
+                request, 'Purchase has been logged, and the material involved has been updated.')
+            return redirect('raw_materials')
+        else:
+            messages.error(request, 'Invalid data entry')
+    else:
+        purchase_log_form = MaterialPurchaseLogForm()
+    context = {
+        'purchase_log_form': purchase_log_form,
+        'selected_material': selected_material,
+    }
+    return render(request, 'manufacturer_site/inventory/forms/create_purchase_log.html', context)
