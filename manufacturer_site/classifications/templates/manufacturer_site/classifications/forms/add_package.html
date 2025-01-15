@@ -1,0 +1,42 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+Add Package
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'product_packaging' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_volume">
+                Package Volume (Liters):
+                <br>
+                <span class="text-sm text-gray-600">Volume of container in liters</span>
+            </label>
+            {{packaging_form.volume}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_alias">
+                Alias:
+                <br>
+                <span class="text-sm text-gray-600">Special name given to package. e.g. 1x Gallon Container</span>
+            </label>
+            {{packaging_form.alias}}
+        </div>
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}
