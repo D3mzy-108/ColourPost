@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import RawMaterial
 from django.db.models import Q
@@ -50,3 +50,17 @@ def add_raw_materials(request):
         'material_form': material_form,
     }
     return render(request, 'manufacturer_site/inventory/forms/create_raw_material.html', context)
+
+
+@login_required
+def delete_raw_material(request):
+    material_id = request.GET.get('id')
+    try:
+        material = RawMaterial.objects.get(id=material_id)
+        material.delete()
+        messages.warning(
+            request, 'Raw material and all related records have been deleted.')
+    except:
+        messages.error(
+            request, 'Failed to identify material ID.')
+    return redirect('raw_materials')
