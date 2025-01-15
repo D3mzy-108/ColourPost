@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     # MANUFACTURER SITE
     'manufacturer_site.dashboard',
     'manufacturer_site.classifications',
+    'manufacturer_site.inventory',
 ]
 
 MIDDLEWARE = [

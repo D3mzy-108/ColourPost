@@ -24,4 +24,6 @@ urlpatterns = [
     path('manufacturer/dashboard/', include('manufacturer_site.dashboard.urls')),
     path('manufacturer/classifications/',
          include('manufacturer_site.classifications.urls')),
+    path('manufacturer/inventory/',
+         include('manufacturer_site.inventory.urls')),
 ]
