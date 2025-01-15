@@ -26,7 +26,7 @@ Product Inventory
             </tr>
         </thead>
         <tbody>
-            {% for product_type in product_types %}
+            {% for item in inventory_items %}
             <tr class="border-b border-b-black/20">
                 <th class="py-2 px-2 font-normal text-start w-[50px]">1</th>
                 <th class="py-2 px-2 font-normal text-start">----</th>
@@ -38,7 +38,7 @@ Product Inventory
                 </th>
             </tr>
             {% endfor %}
-            {% if not product_types %}
+            {% if not inventory_items %}
             <tr class="border border-dashed border-black/20">
                 <td colspan="3" class="py-12 text-center text-gray-600">
                     <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>

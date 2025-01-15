@@ -8,11 +8,67 @@ Raw Materials
 {% include './components/inventory_nav.html' %}
 
 <div class="w-full px-2 md:px-4 py-4">
-    <div class="w-full flex items-center mb-4">
-        <div class="flex-1">
-            <h5 class="text-md">Raw Materials</h5>
+    <div class="w-full mb-8">
+        <legend class="text-md font-semibold">Low Stock</legend>
+
+        <table class="w-full table-auto rounded-xl overflow-hidden mt-4">
+            <thead>
+                <tr class="border-b border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Materials</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Qty</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in low_stock_raw_materials %}
+                <tr class="border-b border-b-black/20">
+                    <th class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</th>
+                    <th class="py-2 px-2 font-normal text-start">
+                        {{material.alias}} -
+                        <span class="text-xs">({{material.code}})</span>
+                    </th>
+                    <th class="py-2 px-2 font-normal text-start">
+                        {{material.quantity_in_stock}} {{material.measurement_unit}}
+                    </th>
+                    <th class="py-2 px-2 font-normal text-start">
+                        <a href=""
+                            class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700 ml-auto mr-4">
+                            <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
+                            <span class="text-sm">Restock</span>
+                        </a>
+                    </th>
+                </tr>
+                {% endfor %}
+                {% if not low_stock_raw_materials %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="4" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Raw Materials with Low Stock
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+    <div class="w-full flex max-sm:flex-col gap-2 items-center mb-4">
+        <div class="max-sm:w-full flex-1 sm:pr-8">
+            <div class="w-full">
+                <form action="" method="get" class="w-full flex">
+                    <input type="search" name="q" id="search"
+                        class="flex-1 bg-transparent border border-black/20 rounded-l-lg text-gray-700 px-4 py-2"
+                        placeholder="Search for materials">
+                    <button
+                        class="px-3 bg-gray-100 text-gray-700 rounded-r-lg grid place-items-center border border-black/20">
+                        <iconify-icon icon="iconamoon:search" width="20" height="20"></iconify-icon>
+                    </button>
+                </form>
+            </div>
         </div>
-        <a href="" class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
+        <a href="{% url 'add_raw_materials' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-full sm:w-fit items-center justify-center">
             <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
             <span>New Material</span>
         </a>
@@ -22,25 +78,33 @@ Raw Materials
             <tr class="border-b border-b-black/40">
                 <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Materials</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Qty</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for product_type in product_types %}
+            {% for material in raw_materials %}
             <tr class="border-b border-b-black/20">
-                <th class="py-2 px-2 font-normal text-start w-[50px]">1</th>
-                <th class="py-2 px-2 font-normal text-start">----</th>
+                <th class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</th>
+                <th class="py-2 px-2 font-normal text-start">
+                    {{material.alias}} -
+                    <span class="text-xs">({{material.code}})</span>
+                </th>
+                <th class="py-2 px-2 font-normal text-start">
+                    {{material.quantity_in_stock}} {{material.measurement_unit}}
+                </th>
                 <th class="py-2 px-2 font-normal text-start">
                     <a href=""
-                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700 ml-auto mr-4">
-                        <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                        class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700 ml-auto mr-4">
+                        <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
+                        <span class="text-sm">Restock</span>
                     </a>
                 </th>
             </tr>
             {% endfor %}
-            {% if not product_types %}
+            {% if not raw_materials %}
             <tr class="border border-dashed border-black/20">
-                <td colspan="3" class="py-12 text-center text-gray-600">
+                <td colspan="4" class="py-12 text-center text-gray-600">
                     <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
                     <br>
                     No Raw Materials added

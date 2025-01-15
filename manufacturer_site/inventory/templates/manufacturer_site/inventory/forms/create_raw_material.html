@@ -1,0 +1,76 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+Add Raw Materials
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'raw_materials' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_name">
+                Material Name:
+                <br>
+                <span class="text-sm text-gray-600"></span>
+            </label>
+            {{material_form.name}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_alias">
+                Material Alias:
+                <br>
+                <span class="text-sm text-gray-600">A name or abbreviation used in your company to refer to the
+                    material</span>
+            </label>
+            {{material_form.alias}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_code">
+                Material Code:
+                <br>
+                <span class="text-sm text-gray-600">A code or scientific name that can be used to identify the
+                    material</span>
+            </label>
+            {{material_form.code}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_quantity_in_stock">
+                Quantity in stock:
+                <br>
+                <span class="text-sm text-gray-600">How much of the material is currently in your possession</span>
+            </label>
+            {{material_form.quantity_in_stock}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_measurement_unit">
+                Measurement Unit:
+                <br>
+                <span class="text-sm text-gray-600">Unit used while measuring the material</span>
+            </label>
+            {{material_form.measurement_unit}}
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="id_cost_price">
+                Cost Price:
+                <br>
+                <span class="text-sm text-gray-600">Cost of material per kg/liter</span>
+            </label>
+            {{material_form.cost_price}}
+        </div>
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}
