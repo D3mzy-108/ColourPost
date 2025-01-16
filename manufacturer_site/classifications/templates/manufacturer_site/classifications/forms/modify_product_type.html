@@ -1,0 +1,75 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+Add Product Type
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'product_types' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-8 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-4">
+            <h3 class="text-lg">
+                {{product_category.name}}
+                <br>
+                <span class="text-sm text-gray-600 font-normal">Materials already included in production under this
+                    category</span>
+            </h3>
+            <ul class="p-2 m-0 w-full space-y-4">
+                {% for material in product_category.raw_materials.all %}
+                <li class="px-4 py-2 border-b border-b-black/20 w-full">
+                    <div class="w-full flex gap-2">
+                        <span>-</span>
+                        <div class="flex-1 font-medium">
+                            {{material}}
+                        </div>
+                        <a href="?removeMaterialID={{material.id}}" class="text-red-700">Remove</a>
+                    </div>
+                </li>
+                {% endfor %}
+                {% if not product_category.raw_materials.all %}
+                <div
+                    class="w-full py-8 text-center border border-dashed border-black/20 rounded-lg text-sm text-gray-600">
+                    No Materials Included
+                </div>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="w-full flex flex-col gap-4">
+            <label for="id_raw_materials" class="mb-2">
+                Add Raw Materials:
+                <br>
+                <span class="text-sm text-gray-600">Select the materials commonly used for manufacturing products under
+                    this category. This will make it easier to set up the "Production" environment</span>
+            </label>
+            {% for material in raw_materials %}
+            <div>
+                <label for="id_raw_materials_{{material.id}}">
+                    <input type="checkbox" name="raw_materials" value="{{material.id}}"
+                        id="id_raw_materials_{{material.id}}">
+                    {{material}}
+                </label>
+            </div>
+            {% endfor %}
+            {% if not raw_materials %}
+            <div class="w-full py-8 text-center border border-dashed border-black/20 rounded-lg text-sm text-gray-600">
+                No Excluded Materials
+            </div>
+            {% endif %}
+        </div>
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}

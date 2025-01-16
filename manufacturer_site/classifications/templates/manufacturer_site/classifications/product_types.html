@@ -12,7 +12,8 @@ Product Types
         <div class="flex-1">
             <h5 class="text-md">Product Types</h5>
         </div>
-        <a href="" class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
+        <a href="{% url 'add_product_category' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
             <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
             <span>Create</span>
         </a>
@@ -22,25 +23,37 @@ Product Types
             <tr class="border-b border-b-black/40">
                 <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Product Type</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Required Materials</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
             </tr>
         </thead>
         <tbody>
             {% for product_type in product_types %}
             <tr class="border-b border-b-black/20">
-                <th class="py-2 px-2 font-normal text-start w-[50px]">1</th>
-                <th class="py-2 px-2 font-normal text-start">----</th>
-                <th class="py-2 px-2 font-normal text-start">
-                    <a href=""
-                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700 ml-auto mr-4">
+                <td class="py-2 px-2 font-normal text-start w-[50px]">
+                    {{forloop.counter}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{product_type.name}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{product_type.raw_materials.count}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start flex gap-4">
+                    <button onclick="deleteCategory('{{product_type.id}}', '{{product_type.name}}')"
+                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                        <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                    </button>
+                    <a href="{% url 'modify_product_category' id=product_type.id %}"
+                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
                         <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
                     </a>
-                </th>
+                </td>
             </tr>
             {% endfor %}
             {% if not product_types %}
             <tr class="border border-dashed border-black/20">
-                <td colspan="3" class="py-12 text-center text-gray-600">
+                <td colspan="4" class="py-12 text-center text-gray-600">
                     <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
                     <br>
                     No Product Types added
@@ -50,4 +63,12 @@ Product Types
         </tbody>
     </table>
 </div>
+
+<script>
+    function deleteCategory(id, categoryName) {
+        if (confirm(`Are you sure you want to delete ${categoryName}?\nAll records related to this item will be deleted`)) {
+            window.location.replace(`{% url 'delete_product_category' %}?id=${id}`)
+        }
+    }
+</script>
 {% endblock content %}

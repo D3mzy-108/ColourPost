@@ -39,4 +39,4 @@ class MaterialPurchaseLog(models.Model):
         return super().save()
 
     def __str__(self):
-        pass
+        return f'{self.raw_material} ~ {self.date}'
