@@ -1,0 +1,81 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+
+{% block title %}
+Productions
+{% endblock title %}
+
+{% block content %}
+<div class="w-full px-2 md:px-4 py-4">
+    <div class="w-full flex max-sm:flex-col gap-2 items-center mb-4">
+        <div class="w-full max-w-lg mr-auto">
+            <div class="w-full">
+                <form action="" method="get" class="w-full flex max-sm:flex-col">
+                    <input type="search" name="q" id="search"
+                        class="w-full sm:flex-1 bg-transparent border border-black/20 rounded-t-lg sm:rounded-l-lg text-gray-700 px-4 py-2"
+                        placeholder="Search for materials">
+                    <input type="date" name="date" id="date"
+                        class="w-full sm:flex-1 bg-transparent border border-black/20 sm:border-x-transparent rounded-b-lg text-gray-700 px-4 py-2"
+                        placeholder="Search for materials">
+                    <button
+                        class="px-3 py-2 max-sm:mt-2 bg-[var(--highlight)] text-white rounded-lg sm:rounded-r-lg grid place-items-center border border-[var(--highlight)]">
+                        <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'add_raw_materials' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-full sm:w-fit items-center justify-center">
+            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
+            <span>New Material</span>
+        </a>
+    </div>
+    <table class="w-full table-auto rounded-xl overflow-hidden">
+        <thead>
+            <tr class="border border-black/20">
+                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Production Code</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Is Completed</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in raw_materials %}
+            <tr class="border-b border-b-black/20">
+                <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{material.name}} -
+                    <span class="text-xs">({{material.alias}})</span>
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{material.quantity_in_stock}} {{material.measurement_unit}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start flex gap-2">
+                    <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
+                        class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
+                        <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
+                        <span class="text-sm">Restock</span>
+                    </a>
+                    <button onclick=""
+                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                        <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+            {% if not raw_materials %}
+            <tr class="border border-dashed border-black/20">
+                <td colspan="5" class="py-12 text-center text-gray-600">
+                    <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
+                    <br>
+                    No Productions Recorded
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+</script>
+{% endblock content %}

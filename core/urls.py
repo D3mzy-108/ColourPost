@@ -26,4 +26,6 @@ urlpatterns = [
          include('manufacturer_site.classifications.urls')),
     path('manufacturer/inventory/',
          include('manufacturer_site.inventory.urls')),
+    path('manufacturer/production/',
+         include('manufacturer_site.production.urls')),
 ]
