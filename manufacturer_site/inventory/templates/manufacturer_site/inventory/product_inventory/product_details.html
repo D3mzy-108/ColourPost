@@ -1,0 +1,69 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+{{product}}
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'product_inventory' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-6 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <h3 class="text-lg">
+                {{product}}
+            </h3>
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="quantity_in_stock">
+                Quantity in stock:
+                <br>
+                <span class="text-sm text-gray-600">How much product is left in your inventory</span>
+            </label>
+            <input type="number" name="quantity_in_stock" id="quantity_in_stock" value="{{product.quantity_in_stock}}"
+                required>
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="cost_price">
+                Cost Price:
+                <br>
+                <span class="text-sm text-gray-600">Cost of production for this product. (Value is calculated
+                    automatically from production)</span>
+            </label>
+            <input type="number" name="cost_price" id="cost_price" value="{{product.cost_price}}" required>
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="selling_price">
+                Selling Price:
+                <br>
+                <span class="text-sm text-gray-600">Set the selling price of this product</span>
+            </label>
+            <input type="number" name="selling_price" id="selling_price" value="{{product.selling_price}}" required>
+        </div>
+
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    select {
+        font-weight: 700;
+        width: 100%;
+        max-width: 400px;
+        padding: 0.4rem 0.8rem;
+        background: #EEE;
+        border-radius: 12px;
+    }
+</style>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}

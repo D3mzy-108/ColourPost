@@ -1,6 +1,6 @@
 // DASHBOARD NAV ACTIVE ITEM
 const navLinks = document.getElementsByClassName("nav-link");
-navLinks.array.forEach((link) => {
+for (let link of navLinks) {
   if (window.location.pathname.includes(link.getAttribute("href"))) {
     link.classList.remove("text-gray-700");
     link.classList.add("bg-green-500/30", "text-green-700");
@@ -8,7 +8,7 @@ navLinks.array.forEach((link) => {
     link.classList.remove("bg-green-500/30", "text-green-700");
     link.classList.add("text-gray-700");
   }
-});
+}
 
 // CLASSIFICATION NAV ACTIVE ITEM
 const classificationNavLinks = document.getElementsByClassName(

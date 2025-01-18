@@ -1,11 +1,13 @@
 from django.urls import path
-from .views import inventory, product_inventory, raw_materials, add_raw_materials, delete_raw_material, material_purchase_log, create_purchase_log
+from .views import inventory, product_inventory, new_product, product_details, raw_materials, add_raw_materials, delete_raw_material, material_purchase_log, create_purchase_log
 
 urlpatterns = [
     path('', inventory, name='inventory'),
 
     # PRODUCTS
     path('products/', product_inventory, name='product_inventory'),
+    path('products/new/', new_product, name='new_product'),
+    path('products/<int:id>/details/', product_details, name='product_details'),
 
     # RAW MATERIALS
     path('raw-materials/', raw_materials, name='raw_materials'),

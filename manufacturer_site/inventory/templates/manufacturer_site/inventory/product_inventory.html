@@ -12,7 +12,8 @@ Product Inventory
         <div class="flex-1">
             <h5 class="text-md">Products</h5>
         </div>
-        <a href="" class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
+        <a href="{% url 'new_product' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-fit items-center">
             <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
             <span>New Product</span>
         </a>
@@ -22,25 +23,34 @@ Product Inventory
             <tr class="border-b border-b-black/40">
                 <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                <th class="py-2 px-2 font-normal text-start bg-gray-100">Package Volume</th>
                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
             </tr>
         </thead>
         <tbody>
-            {% for item in inventory_items %}
+            {% for product in products %}
             <tr class="border-b border-b-black/20">
-                <th class="py-2 px-2 font-normal text-start w-[50px]">1</th>
-                <th class="py-2 px-2 font-normal text-start">----</th>
-                <th class="py-2 px-2 font-normal text-start">
-                    <a href=""
-                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700 ml-auto mr-4">
+                <td class="py-2 px-2 font-normal text-start w-[50px]">
+                    {{forloop.counter}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{product.product_color}}
+                    {{product.product_type}}
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    {{product.package.volume}} lts
+                </td>
+                <td class="py-2 px-2 font-normal text-start">
+                    <a href="{% url 'product_details' product.id %}"
+                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
                         <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
                     </a>
-                </th>
+                </td>
             </tr>
             {% endfor %}
-            {% if not inventory_items %}
+            {% if not products %}
             <tr class="border border-dashed border-black/20">
-                <td colspan="3" class="py-12 text-center text-gray-600">
+                <td colspan="4" class="py-12 text-center text-gray-600">
                     <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
                     <br>
                     No Products added

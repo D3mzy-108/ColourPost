@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import RawMaterial, MaterialPurchaseLog
+from manufacturer_site.classifications.models import Product
 from django.db.models import Q
-from .forms import RawMaterialForm, MaterialPurchaseLogForm
+from .forms import RawMaterialForm, MaterialPurchaseLogForm, ProductForm
 from django.contrib import messages
 
 
@@ -13,8 +14,46 @@ def inventory(request):
 
 @login_required
 def product_inventory(request):
-    context = {}
+    products = Product.objects.all().order_by('-id')
+    context = {
+        'products': products,
+    }
     return render(request, 'manufacturer_site/inventory/product_inventory.html', context)
+
+
+@login_required
+def product_details(request, id):
+    product = get_object_or_404(Product, id=id)
+    if request.method == 'POST':
+        qty = request.POST.get('quantity_in_stock')
+        cost_price = request.POST.get('cost_price')
+        selling_price = request.POST.get('selling_price')
+        product.quantity_in_stock = qty
+        product.cost_price = cost_price
+        product.selling_price = selling_price
+        product.save()
+        messages.success(request, f'Changes to {product} has been saves.')
+        return redirect('product_details', id)
+    context = {
+        'product': product,
+    }
+    return render(request, 'manufacturer_site/inventory/product_inventory/product_details.html', context)
+
+
+@login_required
+def new_product(request):
+    if request.method == 'POST':
+        product_form = ProductForm(request.POST)
+        if product_form.is_valid():
+            product_form.save()
+            messages.success(request, 'New product has been added.')
+            return redirect('product_inventory')
+    else:
+        product_form = ProductForm()
+    context = {
+        'product_form': product_form,
+    }
+    return render(request, 'manufacturer_site/inventory/forms/new_product.html', context)
 
 
 @login_required

@@ -1,5 +1,6 @@
 from django import forms
 from .models import RawMaterial, MaterialPurchaseLog
+from manufacturer_site.classifications.models import Product, Packaging
 
 
 class RawMaterialForm(forms.ModelForm):
@@ -17,3 +18,15 @@ class MaterialPurchaseLogForm(forms.ModelForm):
     class Meta:
         model = MaterialPurchaseLog
         fields = ('raw_material', 'quantity', 'ttl_cost')
+
+
+class ProductForm(forms.ModelForm):
+
+    class Meta:
+        model = Product
+        fields = ('product_color',
+                  'quantity_in_stock',
+                  'cost_price',
+                  'selling_price',
+                  'product_type',
+                  'package',)

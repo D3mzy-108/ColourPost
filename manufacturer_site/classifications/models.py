@@ -25,3 +25,21 @@ class ProductType(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Product(models.Model):
+    product_color = models.CharField(max_length=100)
+    quantity_in_stock = models.IntegerField(default=0)
+    cost_price = models.FloatField(default=0.0)
+    selling_price = models.FloatField(default=0.0)
+    product_type = models.ForeignKey(
+        ProductType, on_delete=models.PROTECT, related_name='products')
+    package = models.ForeignKey(
+        Packaging, on_delete=models.PROTECT, related_name='products')
+
+    class Meta:
+        verbose_name = 'Product'
+        verbose_name_plural = 'Products'
+
+    def __str__(self):
+        return f'{self.product_color} {self.product_type.name} {self.package.alias}'
