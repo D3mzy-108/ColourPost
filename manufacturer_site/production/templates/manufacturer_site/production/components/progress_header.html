@@ -1,20 +1,66 @@
+<div class="flex items-start gap-4 sm:gap-6">
+    <a href="{% url 'productions' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+    <h3 class="text-lg pt-2 align-baseline max-sm:flex-1">
+        {{production.production_code}}
+        ~
+        {{production.product_type}}
+    </h3>
+    <div class="sm:flex-1 pt-2">
+        {% if production.is_completed %}
+        <iconify-icon icon="ic:round-done-all" width="24" height="24" style="color: green"></iconify-icon>
+        {% else %}
+        <iconify-icon icon="fluent:live-24-regular" width="24" height="24" style="color: orange"></iconify-icon>
+        {% endif %}
+    </div>
+</div>
+
 <div class="w-full pt-4 sm:pt-8 flex gap-4">
-    <a href="" class="flex-1 border-t-4 border-t-[var(--highlight)]">
+    {% if active_step > 0 %}
+    <a href="{% url 'production_details' production.id %}" class="flex-1 border-t-4 border-t-[var(--highlight)]">
         <div class="w-full p-2 sm:px-4 bg-white text-start">
             <legend class="text-md sm:text-lg font-medium text-[var(--highlight)]">01.</legend>
             <span class="text-sm sm:text-md text-gray-700">Resources</span>
         </div>
     </a>
-    <a href="" class="flex-1 border-t-4 border-t-gray-300">
+    {% else %}
+    <a href="{% url 'production_details' production.id %}" class="flex-1 border-t-4 border-t-gray-300">
+        <div class="w-full p-2 sm:px-4 bg-white text-start">
+            <legend class="text-md sm:text-lg font-medium text-gray-400">01.</legend>
+            <span class="text-sm sm:text-md text-gray-700">Resources</span>
+        </div>
+    </a>
+    {% endif %}
+    {% if active_step > 1 %}
+    <a href="{% url 'batch_details' production.id %}" class="flex-1 border-t-4 border-t-[var(--highlight)]">
+        <div class="w-full p-2 sm:px-4 bg-white text-start">
+            <legend class="text-md sm:text-lg font-medium text-[var(--highlight)]">02.</legend>
+            <span class="text-sm sm:text-md text-gray-700">Batching</span>
+        </div>
+    </a>
+    {% else %}
+    <a href="{% url 'batch_details' production.id %}" class="flex-1 border-t-4 border-t-gray-300">
         <div class="w-full p-2 sm:px-4 bg-white text-start">
             <legend class="text-md sm:text-lg font-medium text-gray-400">02.</legend>
             <span class="text-sm sm:text-md text-gray-700">Batching</span>
         </div>
     </a>
-    <a href="" class="flex-1 border-t-4 border-t-gray-300">
+    {% endif %}
+    {% if active_step > 2 %}
+    <a href="{% url 'packaging_details' production.id %}" class="flex-1 border-t-4 border-t-[var(--highlight)]">
+        <div class="w-full p-2 sm:px-4 bg-white text-start">
+            <legend class="text-md sm:text-lg font-medium text-[var(--highlight)]">03.</legend>
+            <span class="text-sm sm:text-md text-gray-700">Packaging</span>
+        </div>
+    </a>
+    {% else %}
+    <a href="{% url 'packaging_details' production.id %}" class="flex-1 border-t-4 border-t-gray-300">
         <div class="w-full p-2 sm:px-4 bg-white text-start">
             <legend class="text-md sm:text-lg font-medium text-gray-400">03.</legend>
             <span class="text-sm sm:text-md text-gray-700">Packaging</span>
         </div>
     </a>
+    {% endif %}
 </div>

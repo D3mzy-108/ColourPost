@@ -1,5 +1,6 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
 {% load static %}
+{% load custom_template_filters %}
 
 {% block title %}
 Purchase Log Raw Materials
@@ -38,10 +39,10 @@ Purchase Log Raw Materials
                         {{purchase.raw_material}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
-                        {{purchase.quantity}} {{purchase.raw_material.measurement_unit}}
+                        {{purchase.quantity|comma_separated}} {{purchase.raw_material.measurement_unit}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
-                        {{purchase.ttl_cost}}
+                        #{{purchase.ttl_cost|comma_separated}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
                         {{purchase.date}}

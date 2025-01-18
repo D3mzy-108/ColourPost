@@ -4,7 +4,7 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Production, ProductionResource
+from .models import Production, ProductionResource, ProductionBatch
 from manufacturer_site.classifications.models import ProductType
 from manufacturer_site.inventory.models import RawMaterial
 from django.db.models import Q
@@ -13,6 +13,22 @@ from django.db.models import Q
 def _generate_random_string(length: int) -> str:
     letters = string.ascii_uppercase
     return ''.join(random.choice(letters) for _ in range(length))
+
+
+def _active_steps(production_id) -> int:
+    value = 1
+    if not ProductionResource.objects.filter(production__id=production_id, quantity_used__lte=0).exists():
+        value = 2
+    if not ProductionBatch.objects.filter(production__id=production_id, volume_produced=0).exists():
+        value = 3
+    return value
+
+
+# =====================================================================
+# =====================================================================
+# PRODUCTIONs LIST
+# =====================================================================
+# =====================================================================
 
 
 @login_required
@@ -39,6 +55,11 @@ def new_production(request):
         day = str(today.day).zfill(2)
         production.production_code = f'CP{_generate_random_string(3)}{year}{month}{day}'
         production.save()
+
+        # CREATE BATCH INSTANCE
+        batch = ProductionBatch()
+        batch.production = production
+        batch.save()
 
         # CREATE INSTANCES OF PRODUCTION RESOURCES
         for material in production.product_type.raw_materials.all():
@@ -71,6 +92,12 @@ def delete_production(request):
     return redirect('productions')
 
 
+# =====================================================================
+# =====================================================================
+# PRODUCTION DETAILS
+# =====================================================================
+# =====================================================================
+
 @login_required
 def production_details(request, production_id):
     production = get_object_or_404(Production, id=production_id)
@@ -87,6 +114,8 @@ def production_details(request, production_id):
 
     context = {
         'production': production,
+        'next_tab': 2,
+        'active_step': _active_steps(production_id),
     }
     return render(request, 'manufacturer_site/production/production_details.html', context)
 
@@ -134,3 +163,59 @@ def remove_production_resource(request):
         messages.error(
             request, f'Production environment has already been closed')
     return redirect('production_details', resource.production.id)
+
+
+# =====================================================================
+# =====================================================================
+# PRODUCTION BATCHING
+# =====================================================================
+# =====================================================================
+
+
+@login_required
+def batch_details(request, production_id):
+    production = get_object_or_404(Production, id=production_id)
+    if _active_steps(production_id) < 2:
+        messages.warning(
+            request, 'You have not set the quantity used for some of the production resources.')
+        return redirect('production_details', production_id)
+
+    batch = ProductionBatch.objects.get(production=production)
+    if request.method == 'POST':
+        volume_produced = request.POST.get('volume_produced')
+        batch.volume_produced = volume_produced
+        batch.save()
+        messages.success(request, 'Batch information updated')
+        return redirect('batch_details', production_id)
+
+    context = {
+        'production': production,
+        'batch': batch,
+        'next_tab': 3,
+        'prev_tab': 1,
+        'active_step': _active_steps(production_id),
+    }
+    return render(request, 'manufacturer_site/production/batch_details.html', context)
+
+
+# =====================================================================
+# =====================================================================
+# PRODUCTION PACKAGING
+# =====================================================================
+# =====================================================================
+
+
+@login_required
+def packaging_details(request, production_id):
+    production = get_object_or_404(Production, id=production_id)
+    if _active_steps(production_id) < 3:
+        messages.warning(
+            request, 'Set the volume produced in this batch')
+        return redirect('packaging_details', production_id)
+
+    context = {
+        'production': production,
+        'prev_tab': 2,
+        'active_step': _active_steps(production_id),
+    }
+    return render(request, 'manufacturer_site/production/packaging_details.html', context)

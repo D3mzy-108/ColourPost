@@ -1,5 +1,6 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
 {% load static %}
+{% load custom_template_filters %}
 
 {% block title %}
 {{production.production_code}} ~ {{production.product_type}}
@@ -7,18 +8,6 @@
 
 {% block content %}
 <div class="w-full py-4">
-    <div class="flex items-start gap-4 sm:gap-6">
-        <a href="{% url 'productions' %}"
-            class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
-            <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
-        </a>
-        <h3 class="text-lg pt-2">
-            {{production.production_code}}
-            ~
-            {{production.product_type}}
-        </h3>
-    </div>
-
     {% include './components/progress_header.html' %}
 
     <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-6 px-4 sm:px-8 w-full styled-form">
@@ -50,7 +39,7 @@
                             </td>
                             <td class="py-2 px-2 font-normal text-start">
                                 {% if production.is_completed %}
-                                {{resource.quantity_used}}
+                                {{resource.quantity_used|comma_separated}}
                                 {% else %}
                                 <input type="number" name="quantity_used_{{resource.id}}"
                                     id="quantity_used_{{resource.id}}" step="0.10" value="{{resource.quantity_used}}"
@@ -59,7 +48,7 @@
                                 {% endif %}
                             </td>
                             <td class="py-2 px-2 font-normal text-start">
-                                {{resource.ttl_cost}}
+                                #{{resource.ttl_cost|comma_separated}}
                             </td>
                             <td class="py-2 px-2 font-normal text-start flex gap-2">
                                 <button type="button"
@@ -83,7 +72,8 @@
         {% endif %}
     </form>
 
-    {% include './components/production_navigation.html' %}
+    {% include './components/production_footer_navigation.html' %}
+
 </div>
 
 <style>

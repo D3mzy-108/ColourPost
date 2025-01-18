@@ -1,4 +1,5 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load custom_template_filters %}
 
 {% block title %}
 Raw Materials
@@ -36,7 +37,7 @@ Raw Materials
                         <span class="text-xs">({{material.alias}})</span>
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
-                        {{material.quantity_in_stock}} {{material.measurement_unit}}
+                        {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start flex gap-2">
                         <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
@@ -102,7 +103,7 @@ Raw Materials
                     <span class="text-xs">({{material.alias}})</span>
                 </td>
                 <td class="py-2 px-2 font-normal text-start">
-                    {{material.quantity_in_stock}} {{material.measurement_unit}}
+                    {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
                 </td>
                 <td class="py-2 px-2 font-normal text-start flex gap-2">
                     <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
