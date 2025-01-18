@@ -1,0 +1,54 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+New Production
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'productions' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <label for="product_type">
+                End Result:
+                <br>
+                <span class="text-sm text-gray-600">
+                    Select what type of product you want to produce
+                </span>
+            </label>
+            <select name="product_type" id="product_type">
+                {% for product_type in product_types %}
+                <option value="{{product_type.id}}">
+                    {{product_type}}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="w-full mt-4">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Submit</button>
+        </div>
+    </form>
+</div>
+
+<style>
+    select {
+        font-size: large;
+        font-weight: 700;
+        width: 100%;
+        max-width: 400px;
+        padding: 0.4rem 0.8rem;
+        background: #EEE;
+        border-radius: 12px;
+    }
+</style>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}

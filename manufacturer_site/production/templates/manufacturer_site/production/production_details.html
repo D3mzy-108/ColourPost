@@ -1,0 +1,109 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+
+{% block title %}
+{{production.production_code}} ~ {{production.product_type}}
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <div class="flex items-start gap-4 sm:gap-6">
+        <a href="{% url 'productions' %}"
+            class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+            <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+        </a>
+        <h3 class="text-lg pt-2">
+            {{production.production_code}}
+            ~
+            {{production.product_type}}
+        </h3>
+    </div>
+
+    {% include './components/progress_header.html' %}
+
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-4">
+            <label for="">
+                <span class="font-medium text-lg">Resources:</span>
+                <br>
+                <span class="text-sm text-gray-600">Materials used in this production</span>
+            </label>
+
+            <div class="table-wrapper max-w-full rounded-xl overflow-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="border border-gray-100 border-b-black/40">
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Material</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity Used</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Total Cost</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resource in production.resources.all %}
+                        <tr class="border-b border-b-black/20">
+                            <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                            <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
+                                {{resource.material}}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start">
+                                {% if production.is_completed %}
+                                {{resource.quantity_used}}
+                                {% else %}
+                                <input type="number" name="quantity_used_{{resource.id}}"
+                                    id="quantity_used_{{resource.id}}" step="0.10" value="{{resource.quantity_used}}"
+                                    max="{{resource.material.quantity_in_stock}}" min="1" placeholder="Quantity Used"
+                                    required class="small-input">
+                                {% endif %}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start">
+                                {{resource.ttl_cost}}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start flex gap-2">
+                                <button type="button"
+                                    onclick="removeResource('{{resource.id}}', '{{resource.material}}')"
+                                    class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                                    <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if not production.is_completed %}
+        <div class="w-full mt-4 flex">
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Save</button>
+            <a href="{% url 'add_production_resource' production.id %}"
+                class="px-4 py-2 bg-transparent text-blue-700 rounded-lg">+ Add Resource</a>
+        </div>
+        {% endif %}
+    </form>
+
+    {% include './components/production_navigation.html' %}
+</div>
+
+<style>
+    .small-input {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        text-align: center !important;
+        width: 50px;
+    }
+</style>
+<!--  -->
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+<script>
+    function removeResource(id, resourceName) {
+        if (confirm(`Are you sure you want to delete ${resourceName}?\nAll records related to this item will be deleted`)) {
+            window.location.replace(`{% url 'remove_production_resource' %}?id=${id}`)
+        }
+    }
+</script>
+{% endblock scripts %}
