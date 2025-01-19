@@ -4,8 +4,8 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Production, ProductionResource, ProductionBatch
-from manufacturer_site.classifications.models import ProductType
+from .models import Production, ProductionResource, ProductionBatch, BatchItem
+from manufacturer_site.classifications.models import ProductType, Product
 from manufacturer_site.inventory.models import RawMaterial
 from django.db.models import Q
 
@@ -90,6 +90,16 @@ def delete_production(request):
         messages.error(
             request, f'Production environment has already been closed')
     return redirect('productions')
+
+
+@login_required
+def navigate_production_environment(request, production_id, tab):
+    if tab == 1:
+        return redirect('production_details', production_id)
+    elif tab == 2:
+        return redirect('batch_details', production_id)
+    elif tab == 3:
+        return redirect('packaging_details', production_id)
 
 
 # =====================================================================
@@ -213,9 +223,67 @@ def packaging_details(request, production_id):
             request, 'Set the volume produced in this batch')
         return redirect('packaging_details', production_id)
 
+    total_recorded_volume = 0
+    for item in production.batch.batch_items.all():
+        total_recorded_volume += item.total_volume
+
+    if request.method == 'POST':
+        for item in production.batch.batch_items.all():
+            qty = request.POST.get(f'quantity_produced_{item.id}')
+            item.quantity_produced = float(f"{qty}")
+            item.save()
+        else:
+            messages.success(
+                request, "Changes to production batch items have been saved.")
+            return redirect('packaging_details', production_id)
+
     context = {
         'production': production,
         'prev_tab': 2,
         'active_step': _active_steps(production_id),
+        'total_recorded_volume': total_recorded_volume,
     }
     return render(request, 'manufacturer_site/production/packaging_details.html', context)
+
+
+@login_required
+def add_package_item(request, production_id):
+    production = get_object_or_404(Production, id=production_id)
+    included_products = production.batch.batch_items.all()
+    query = request.GET.get('q') or ''
+    pid = request.GET.get('pid')
+    if pid is not None:
+        product = get_object_or_404(Product, id=pid)
+        batch_item = BatchItem()
+        batch_item.batch = production.batch
+        batch_item.product = product
+        batch_item.save()
+        messages.success(
+            request, f'{product} has been added to production batch items.')
+        return redirect(request.META.get('HTTP_REFERER'))
+    included_materials_list = [
+        item.product.id for item in included_products
+    ]
+    excluded_materials = Product.objects.filter(
+        Q(product_type__name__icontains=query)
+    ).exclude(id__in=included_materials_list)
+
+    context = {
+        'production': production,
+        'excluded_materials': excluded_materials,
+    }
+    return render(request, 'manufacturer_site/production/forms/add_package_item.html', context)
+
+
+@login_required
+def remove_package_item(request):
+    item_id = request.GET.get('id')
+    item = get_object_or_404(BatchItem, id=item_id)
+    if not item.batch.production.is_completed:
+        item.delete()
+        messages.info(
+            request, f'{item.product} has been removed from production batch items')
+    else:
+        messages.error(
+            request, f'Production environment has already been closed')
+    return redirect('packaging_details', item.batch.production.id)

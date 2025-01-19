@@ -1,0 +1,12 @@
+<div class="w-full px-4 py-4 flex justify-end gap-4">
+    {% if prev_tab %}
+    <a href="{% url 'navigate_production_environment' production.id prev_tab %}"
+        class="px-6 py-2 bg-white text-gray-800 rounded-lg">Back</a>
+    {% endif %}
+    {% if next_tab %}
+    <a href="{% url 'navigate_production_environment' production.id next_tab %}"
+        class="px-6 py-2 bg-[var(--highlight)] text-white rounded-lg">Next</a>
+    {% else %}
+    <a href="" class="px-6 py-2 bg-[var(--highlight)] text-white rounded-lg">Finish</a>
+    {% endif %}
+</div>

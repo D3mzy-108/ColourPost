@@ -10,7 +10,7 @@
 <div class="w-full py-4">
     {% include './components/progress_header.html' %}
 
-    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-6 px-4 w-full max-w-xl styled-form">
+    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-6 px-4 w-full styled-form">
         {% csrf_token %}
         <div class="w-full flex flex-col gap-8">
             <label for="">
@@ -19,20 +19,77 @@
                 <span class="text-sm text-gray-600">Assign produced batch to respective product inventory.</span>
             </label>
 
-            <div class="w-full px-2 sm:px-4 flex flex-col gap-2">
-                <label for="volume_produced" class="w-full flex-1">
-                    <span class="">Produced Items:</span>
-                    <br>
-                    <span class="text-sm text-gray-600">List of items derived from this production</span>
-                </label>
-                <div class="w-full">
+            <div class="w-full sm:px-2 flex flex-col gap-4">
+                <div class="w-full flex gap-4 pb-8">
+                    <div class="w-full flex-1">
+                        <legend class="text-[var(--highlight)] text-sm">Total Batch Volume</legend>
+                        <h3 class="text-lg">{{production.batch.volume_produced|comma_separated}} lts</h3>
+                    </div>
+                    <div class="w-full flex-1">
+                        <legend class="text-[var(--highlight)] text-sm">Recorded Volume</legend>
+                        <h3 class="text-lg">{{total_recorded_volume|comma_separated}} lts</h3>
+                    </div>
+                </div>
+
+                <div class="table-wrapper max-w-full rounded-xl overflow-auto">
+                    <table class="w-full table-auto">
+                        <thead>
+                            <tr class="border border-gray-100 border-b-black/40">
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity Produced</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Total Volume</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in production.batch.batch_items.all %}
+                            <tr class="border-b border-b-black/20">
+                                <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                                <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
+                                    {{item.product}}
+                                </td>
+                                <td class="py-2 px-2 font-normal text-start">
+                                    {% if production.is_completed %}
+                                    {{item.quantity_produced|comma_separated}}
+                                    {% else %}
+                                    <input type="number" name="quantity_produced_{{item.id}}"
+                                        id="quantity_produced_{{item.id}}" step="0.10"
+                                        value="{{item.quantity_produced}}" min="1" placeholder="Quantity Produced"
+                                        required class="small-input">
+                                    {% endif %}
+                                </td>
+                                <td class="py-2 px-2 font-normal text-start">
+                                    {{item.total_volume|comma_separated}} lts
+                                </td>
+                                <td class="py-2 px-2 font-normal text-start flex gap-2">
+                                    <button type="button" onclick="removeItem('{{item.id}}', '{{item.product}}')"
+                                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                                        <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if not production.batch.batch_items.all %}
+                            <tr class="border border-dashed border-black/20">
+                                <td colspan="5" class="py-12 text-center text-gray-600">
+                                    <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                                        class="mx-auto"></iconify-icon>
+                                    <br>
+                                    No Items recorded in batch
+                                </td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
         </div>
         {% if not production.is_completed %}
         <div class="w-full mt-4 flex">
             <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Save</button>
+            <a href="{% url 'add_package_item' production.id %}"
+                class="px-4 py-2 bg-transparent text-blue-700 rounded-lg">+ Add Item</a>
         </div>
         {% endif %}
     </form>
@@ -54,4 +111,11 @@
 
 {% block scripts %}
 <script src="{% static 'js/form-utils/input-style.js' %}"></script>
+<script>
+    function removeItem(id, itemName) {
+        if (confirm(`Are you sure you want to delete ${itemName}?\nAll records related to this item will be deleted`)) {
+            window.location.replace(`{% url 'remove_package_item' %}?id=${id}`)
+        }
+    }
+</script>
 {% endblock scripts %}

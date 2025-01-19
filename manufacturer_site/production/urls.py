@@ -1,10 +1,23 @@
 from django.urls import path
-from .views import productions, new_production, delete_production, production_details, add_production_resource, remove_production_resource, batch_details, packaging_details
+from .views import (productions,
+                    batch_details,
+                    new_production,
+                    add_package_item,
+                    packaging_details,
+                    delete_production,
+                    production_details,
+                    remove_package_item,
+                    add_production_resource,
+                    remove_production_resource,
+                    navigate_production_environment)
 
 urlpatterns = [
     path('', productions, name='productions'),
     path('new/', new_production, name='new_production'),
     path('delete/', delete_production, name='delete_production'),
+    path('delete/', delete_production, name='delete_production'),
+    path('<int:production_id>/navigate-environment/tab/<int:tab>/',
+         navigate_production_environment, name='navigate_production_environment'),
 
     # PRODUCTION DETAILS
     path('<int:production_id>/details/',
@@ -21,4 +34,8 @@ urlpatterns = [
     # PACKAGING URLS
     path('<int:production_id>/packaging/',
          packaging_details, name='packaging_details'),
+    path('<int:production_id>/packaging/add-item/',
+         add_package_item, name='add_package_item'),
+    path('packaging/remove-item/',
+         remove_package_item, name='remove_package_item'),
 ]

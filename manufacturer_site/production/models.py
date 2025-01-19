@@ -1,5 +1,5 @@
 from django.db import models
-from manufacturer_site.classifications.models import ProductType
+from manufacturer_site.classifications.models import ProductType, Product
 from manufacturer_site.inventory.models import RawMaterial
 
 
@@ -71,3 +71,18 @@ class ProductionBatch(models.Model):
 
     def __str__(self):
         return self.production.production_code
+
+
+class BatchItem(models.Model):
+    batch = models.ForeignKey(
+        ProductionBatch, on_delete=models.CASCADE, related_name='batch_items')
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    quantity_produced = models.FloatField(default=0.0)
+    total_volume = models.FloatField(default=0.0)
+
+    def save(self, *args):
+        self.total_volume = self.quantity_produced * self.product.package.volume
+        return super().save()
+
+    def __str__(self):
+        return self.product
