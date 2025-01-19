@@ -3,6 +3,7 @@ from .views import (productions,
                     batch_details,
                     new_production,
                     add_package_item,
+                    finish_production,
                     packaging_details,
                     delete_production,
                     production_details,
@@ -18,6 +19,8 @@ urlpatterns = [
     path('delete/', delete_production, name='delete_production'),
     path('<int:production_id>/navigate-environment/tab/<int:tab>/',
          navigate_production_environment, name='navigate_production_environment'),
+    path('finish/<int:production_id>/',
+         finish_production, name='finish_production'),
 
     # PRODUCTION DETAILS
     path('<int:production_id>/details/',

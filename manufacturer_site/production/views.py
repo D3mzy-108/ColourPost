@@ -102,11 +102,29 @@ def navigate_production_environment(request, production_id, tab):
         return redirect('packaging_details', production_id)
 
 
+@login_required
+def finish_production(request, production_id):
+    production = get_object_or_404(Production, id=production_id)
+    total_recorded_volume = 0
+    for item in production.batch.batch_items.all():
+        total_recorded_volume += item.total_volume
+    if not production.batch.volume_produced == total_recorded_volume:
+        messages.warning(
+            request, 'Total volume produced in batch is not equal to total recorded volume in batch items.')
+        return redirect(request.META.get('HTTP_REFERER'))
+    else:
+        production.is_completed = True
+        production.save()
+        messages.success(
+            request, f'Production Completed! {production.production_code} environment is now closed.')
+        return redirect('productions')
+
 # =====================================================================
 # =====================================================================
 # PRODUCTION DETAILS
 # =====================================================================
 # =====================================================================
+
 
 @login_required
 def production_details(request, production_id):
