@@ -1,6 +1,6 @@
 from django import forms
 from .models import RawMaterial, MaterialPurchaseLog
-from manufacturer_site.classifications.models import Product, Packaging
+from manufacturer_site.classifications.models import Product
 
 
 class RawMaterialForm(forms.ModelForm):

@@ -27,7 +27,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if config('DEBUG') == 'True' else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
 
     # MANUFACTURER SITE
     'manufacturer_site.dashboard',
-    'manufacturer_site.classifications',
     'manufacturer_site.inventory',
+    'manufacturer_site.classifications',
     'manufacturer_site.production',
 ]
 
