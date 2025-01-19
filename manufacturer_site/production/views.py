@@ -113,8 +113,22 @@ def finish_production(request, production_id):
             request, 'Total volume produced in batch is not equal to total recorded volume in batch items.')
         return redirect(request.META.get('HTTP_REFERER'))
     else:
+        # CLOSE PRODUCTION
         production.is_completed = True
         production.save()
+
+        # UPDATE RAW MATERIAL INVENTORY
+        for resource in production.resources.all():
+            resource.material.quantity_in_stock -= resource.quantity_used
+            resource.material.save()
+
+        # UPDATE PRODUCT INVENTORY
+        for item in production.batch.batch_items.all():
+            item.product.quantity_in_stock += round(item.quantity_produced)
+            item.product.cost_price = (
+                production.batch.ttl_cost/production.batch.volume_produced) * item.product.package.volume
+            item.product.save()
+
         messages.success(
             request, f'Production Completed! {production.production_code} environment is now closed.')
         return redirect('productions')
