@@ -11,14 +11,18 @@ class PackagingForm(forms.ModelForm):
 
 
 class ProductTypeForm(forms.ModelForm):
-    raw_material_choices = [
-        (f'{material.id}', material) for material in RawMaterial.objects.all()
-    ]
     raw_materials = forms.MultipleChoiceField(
-        choices=raw_material_choices,
         widget=forms.CheckboxSelectMultiple(),
     )
 
     class Meta:
         model = ProductType
         fields = ('name', 'raw_materials')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Dynamically populate raw_material_choices
+        raw_material_choices = [
+            (f'{material.id}', material) for material in RawMaterial.objects.all()
+        ]
+        self.fields['raw_materials'].choices = raw_material_choices
