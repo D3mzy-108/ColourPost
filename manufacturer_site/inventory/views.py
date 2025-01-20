@@ -59,9 +59,9 @@ def raw_materials(request):
         Q(name__icontains=query) |
         Q(alias__icontains=query) |
         Q(code__icontains=query)
-    )
+    ).order_by('-id')
     low_stock_raw_materials = RawMaterial.objects.filter(
-        quantity_in_stock__lt=50)
+        quantity_in_stock__lt=50).order_by('-id')
     context = {
         'raw_materials': raw_materials,
         'low_stock_raw_materials': low_stock_raw_materials,
