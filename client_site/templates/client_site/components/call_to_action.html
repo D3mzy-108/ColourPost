@@ -1,0 +1,23 @@
+<section class="px-12 bg-[#65B5A320] p-12 pb-6">
+    <div class="w-full max-w-7xl mx-auto">
+        <h3 class="text-2xl text-center">Ready to take your business to the next level?</h3>
+        <div class="w-full max-w-lg mx-auto py-4 text-center">
+            Sign up now and experience the ColourPost advantage!
+        </div>
+        <a href="{% url 'login' %}"
+            class="flex space-x-1 items-center justify-center w-fit px-6 py-3 text-lg text-white bg-[var(--highlight)] rounded-xl mx-auto">
+            Get Started
+            <iconify-icon icon="ep:right" width="24" height="24"></iconify-icon>
+        </a>
+
+    </div>
+    <div class="w-full text-center text-[var(--highlight)] mt-6">
+        &copy; Copyright <span id="year"></span>, ColourPost.
+    </div>
+</section>
+
+<script>
+    var year = document.getElementById('year')
+    let date = new Date()
+    year.textContent = date.getFullYear()
+</script>
