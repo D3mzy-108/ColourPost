@@ -1,4 +1,5 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load custom_template_filters %}
 
 {% block title %}
 Product Inventory
@@ -18,50 +19,64 @@ Product Inventory
             <span>New Product</span>
         </a>
     </div>
-    <table class="w-full table-auto rounded-xl overflow-hidden">
-        <thead>
-            <tr class="border-b border-b-black/40">
-                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Package Volume</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity in Stock</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for product in products %}
-            <tr class="border-b border-b-black/20">
-                <td class="py-2 px-2 font-normal text-start w-[50px]">
-                    {{forloop.counter}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{product.product_color}}
-                    {{product.product_type}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{product.package.volume}} lts
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{product.quantity_in_stock}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    <a href="{% url 'product_details' product.id %}"
-                        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
-                        <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% if not products %}
-            <tr class="border border-dashed border-black/20">
-                <td colspan="4" class="py-12 text-center text-gray-600">
-                    <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
-                    <br>
-                    No Products added
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
+    <div class="w-full overflow-auto rounded-xl">
+        <table class="w-full table-auto">
+            <thead>
+                <tr class="border-b border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Package</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity in Stock</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Rate</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Amount</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in products %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-2 font-normal text-start w-[50px]">
+                        {{forloop.counter}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{product.product_color}}
+                        {{product.product_type}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{product.package.alias}}
+                        <span class="text-sm text-gray-600">
+                            ({{product.package.volume}} lts)
+                        </span>
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{product.quantity_in_stock}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        #{{product.cost_price|comma_separated}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        #{{product.selling_price|comma_separated}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        <a href="{% url 'product_details' product.id %}"
+                            class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
+                            <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not products %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="7" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Products added
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock content %}
