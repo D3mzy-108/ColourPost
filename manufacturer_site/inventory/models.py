@@ -5,6 +5,7 @@ class RawMaterial(models.Model):
     units = [
         ('kgs', 'Kilograms'),
         ('lts', 'Liters'),
+        ('units', 'Units'),
     ]
     name = models.CharField(max_length=100)
     alias = models.CharField(max_length=50)

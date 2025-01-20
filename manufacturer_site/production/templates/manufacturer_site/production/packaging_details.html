@@ -39,6 +39,8 @@
                                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
                                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity Produced</th>
                                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Total Volume</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Cost per Liter</th>
+                                <th class="py-2 px-2 font-normal text-start bg-gray-100">Selling Price</th>
                                 <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
                             </tr>
                         </thead>
@@ -62,6 +64,22 @@
                                 <td class="py-2 px-2 font-normal text-start">
                                     {{item.total_volume|comma_separated}} lts
                                 </td>
+                                <td class="py-2 px-2 font-normal text-start">
+                                    {% for cp in cost_price_list %}
+                                    {% if cp.pk == item.pk %}
+                                    #{{cp.cost_price|floatformat:2|comma_separated}}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td class="py-2 px-2 font-normal text-start">
+                                    {% if production.is_completed %}
+                                    #{{item.selling_price|floatformat:2|comma_separated}}
+                                    {% else %}
+                                    <input type="number" name="selling_price_{{item.id}}" id="selling_price_{{item.id}}"
+                                        step="0.10" value="{{item.selling_price}}" min="1" placeholder="Selling Price"
+                                        required class="small-input">
+                                    {% endif %}
+                                </td>
                                 <td class="py-2 px-2 font-normal text-start flex gap-2">
                                     <button type="button" onclick="removeItem('{{item.id}}', '{{item.product}}')"
                                         class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
@@ -72,7 +90,7 @@
                             {% endfor %}
                             {% if not production.batch.batch_items.all %}
                             <tr class="border border-dashed border-black/20">
-                                <td colspan="5" class="py-12 text-center text-gray-600">
+                                <td colspan="7" class="py-12 text-center text-gray-600">
                                     <iconify-icon icon="stash:subscription-list" width="32" height="32"
                                         class="mx-auto"></iconify-icon>
                                     <br>
@@ -100,10 +118,9 @@
 
 <style>
     .small-input {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        text-align: center !important;
-        width: 50px;
+        padding-left: 0.25rem !important;
+        padding-right: 0.25rem !important;
+        width: 100px;
     }
 </style>
 <!--  -->

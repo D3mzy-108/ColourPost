@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from .models import Production, ProductionResource, ProductionBatch, BatchItem
 from manufacturer_site.classifications.models import ProductType, Product
 from manufacturer_site.inventory.models import RawMaterial
-from django.db.models import Q
+from django.db.models import Q, F, ExpressionWrapper, FloatField
 
 
 def _generate_random_string(length: int) -> str:
@@ -33,7 +33,7 @@ def _active_steps(production_id) -> int:
 
 @login_required
 def productions(request):
-    productions = Production.objects.all()
+    productions = Production.objects.all().order_by('-id', '-date')
     context = {
         'productions': productions,
     }
@@ -125,8 +125,10 @@ def finish_production(request, production_id):
         # UPDATE PRODUCT INVENTORY
         for item in production.batch.batch_items.all():
             item.product.quantity_in_stock += round(item.quantity_produced)
-            item.product.cost_price = (
+            cost_price = (
                 production.batch.ttl_cost/production.batch.volume_produced) * item.product.package.volume
+            item.product.cost_price = f"{cost_price:.2f}"
+            item.product.selling_price = item.selling_price
             item.product.save()
 
         messages.success(
@@ -262,18 +264,28 @@ def packaging_details(request, production_id):
     if request.method == 'POST':
         for item in production.batch.batch_items.all():
             qty = request.POST.get(f'quantity_produced_{item.id}')
+            sp = request.POST.get(f'selling_price_{item.id}')
             item.quantity_produced = float(f"{qty}")
+            item.selling_price = float(f"{sp}")
             item.save()
         else:
             messages.success(
                 request, "Changes to production batch items have been saved.")
             return redirect('packaging_details', production_id)
 
+    cost_prices_list = []
+    for item in production.batch.batch_items.all().annotate(cost_price=ExpressionWrapper(((F('batch__ttl_cost')/F('batch__volume_produced')) * F('product__package__volume')), output_field=FloatField())):
+        cost_prices_list.append({
+            'pk': item.pk,
+            'cost_price': item.cost_price,
+        })
+
     context = {
         'production': production,
         'prev_tab': 2,
         'active_step': _active_steps(production_id),
         'total_recorded_volume': total_recorded_volume,
+        'cost_price_list': cost_prices_list,
     }
     return render(request, 'manufacturer_site/production/packaging_details.html', context)
 
@@ -289,6 +301,7 @@ def add_package_item(request, production_id):
         batch_item = BatchItem()
         batch_item.batch = production.batch
         batch_item.product = product
+        batch_item.selling_price = product.selling_price
         batch_item.save()
         messages.success(
             request, f'{product} has been added to production batch items.')

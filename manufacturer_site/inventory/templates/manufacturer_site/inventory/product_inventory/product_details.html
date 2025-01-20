@@ -1,5 +1,6 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
 {% load static %}
+{% load custom_template_filters %}
 
 {% block title %}
 {{product}}
@@ -25,8 +26,7 @@
                 <br>
                 <span class="text-sm text-gray-600">How much product is left in your inventory</span>
             </label>
-            <input type="number" name="quantity_in_stock" id="quantity_in_stock" value="{{product.quantity_in_stock}}"
-                required>
+            <h3 class="text-lg">{{product.quantity_in_stock|comma_separated}}</h3>
         </div>
         <div class="w-full flex flex-col gap-2">
             <label for="cost_price">
@@ -35,7 +35,7 @@
                 <span class="text-sm text-gray-600">Cost of production for this product. (Value is calculated
                     automatically from production)</span>
             </label>
-            <input type="number" name="cost_price" id="cost_price" value="{{product.cost_price}}" required>
+            <h3 class="text-lg"># {{product.cost_price|comma_separated}}</h3>
         </div>
         <div class="w-full flex flex-col gap-2">
             <label for="selling_price">

@@ -79,6 +79,7 @@ class BatchItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT)
     quantity_produced = models.FloatField(default=0.0)
     total_volume = models.FloatField(default=0.0)
+    selling_price = models.FloatField(default=0.0)
 
     def save(self, *args):
         self.total_volume = self.quantity_produced * self.product.package.volume

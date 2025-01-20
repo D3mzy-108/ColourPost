@@ -25,11 +25,7 @@ def product_inventory(request):
 def product_details(request, id):
     product = get_object_or_404(Product, id=id)
     if request.method == 'POST':
-        qty = request.POST.get('quantity_in_stock')
-        cost_price = request.POST.get('cost_price')
         selling_price = request.POST.get('selling_price')
-        product.quantity_in_stock = qty
-        product.cost_price = cost_price
         product.selling_price = selling_price
         product.save()
         messages.success(request, f'Changes to {product} has been saves.')
