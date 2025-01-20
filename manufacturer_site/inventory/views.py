@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import RawMaterial, MaterialPurchaseLog
 from manufacturer_site.classifications.models import Product
-from django.db.models import Q
+from django.db.models import Q, ExpressionWrapper, F, FloatField
 from .forms import RawMaterialForm, MaterialPurchaseLogForm, ProductForm
 from django.contrib import messages
 
@@ -14,7 +14,8 @@ def inventory(request):
 
 @login_required
 def product_inventory(request):
-    products = Product.objects.all().order_by('-id')
+    products = Product.objects.all().annotate(amount=ExpressionWrapper(F('selling_price')
+                                                                       * F('quantity_in_stock'), output_field=FloatField())).order_by('-id')
     context = {
         'products': products,
     }
