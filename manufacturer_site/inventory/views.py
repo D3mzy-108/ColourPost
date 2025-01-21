@@ -14,8 +14,10 @@ def inventory(request):
 
 @login_required
 def product_inventory(request):
-    products = Product.objects.all().annotate(amount=ExpressionWrapper(F('selling_price')
-                                                                       * F('quantity_in_stock'), output_field=FloatField())).order_by('-id')
+    products = Product.objects.all().annotate(
+        market_value=ExpressionWrapper(
+            F('selling_price') * F('quantity_in_stock'), output_field=FloatField()),
+        true_value=ExpressionWrapper(F('cost_price') * F('quantity_in_stock'), output_field=FloatField())).order_by('-id')
     context = {
         'products': products,
     }
