@@ -1,0 +1,26 @@
+{% load static %}
+
+<div class="w-full p-6 lg:p-12 pt-24 lg:pt-20">
+    <div class="w-full max-w-7xl mx-auto">
+        <form method="get" class="w-full grid grid-cols-2 md:flex gap-3 styled-form">
+            <input type="text" name="q" id="q" class="col-span-2 md:flex-1" placeholder="Search by paint colour">
+
+            <select name="pkg" id="pkg" class="bg-gray-100 p-2 border rounded-lg text-gray-700">
+                <option value="">Package</option>
+                {% for package in packaging %}
+                <option value="{{package.id}}">{{package.alias}}</option>
+                {% endfor %}
+            </select>
+            <select name="pty" id="pty" class="bg-gray-100 p-2 border rounded-lg text-gray-700">
+                <option value="">Product Type</option>
+                {% for product_type in product_types %}
+                <option value="{{product_type.id}}">{{product_type.name}}</option>
+                {% endfor %}
+            </select>
+            <button type="submit"
+                class="col-span-2 px-6 py-2 bg-[var(--highlight)] text-white rounded-lg">Apply</button>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>

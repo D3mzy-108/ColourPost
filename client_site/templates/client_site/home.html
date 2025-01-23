@@ -6,21 +6,14 @@ Home
 {% endblock title %}
 
 {% block main %}
-<header class="fixed top-0 z-10 w-screen backdrop-blur-lg bg-white/70 py-6 px-8">
-    <div class="w-full flex">
-        <div class="w-fit logo flex items-center text-2xl scale-[1.2] ml-4">
-            {% include 'components/logo.html' %}
-            <h3>ColourPost</h3>
-        </div>
-    </div>
-</header>
+{% include './components/header.html' %}
 
 <div class="w-full bg-[#DDD] pt-12">
     <div class="w-full flex flex-col gap-24 bg-white">
-        {% include './components/banner.html' %}
-        {% include './components/key_features.html' %}
-        {% include './components/testimonials.html' %}
-        {% include './components/call_to_action.html' %}
+        {% include './components/home/banner.html' %}
+        {% include './components/home/key_features.html' %}
+        {% include './components/home/testimonials.html' %}
+        {% include './components/home/call_to_action.html' %}
     </div>
 
 </div>
