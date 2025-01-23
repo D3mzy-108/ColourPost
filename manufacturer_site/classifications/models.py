@@ -28,6 +28,8 @@ class ProductType(models.Model):
 
 
 class Product(models.Model):
+    image = models.ImageField(
+        upload_to='finished-goods/', null=True, blank=True)
     product_color = models.CharField(max_length=100)
     quantity_in_stock = models.IntegerField(default=0)
     cost_price = models.FloatField(default=0.0)

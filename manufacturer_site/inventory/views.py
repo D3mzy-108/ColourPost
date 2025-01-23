@@ -30,6 +30,7 @@ def product_details(request, id):
     if request.method == 'POST':
         selling_price = request.POST.get('selling_price')
         product.selling_price = selling_price
+        product.image = request.FILES.get('image')
         product.save()
         messages.success(request, f'Changes to {product} has been saves.')
         return redirect('product_details', id)
@@ -42,7 +43,7 @@ def product_details(request, id):
 @login_required
 def new_product(request):
     if request.method == 'POST':
-        product_form = ProductForm(request.POST)
+        product_form = ProductForm(request.POST, request.FILES)
         if product_form.is_valid():
             product_form.save()
             messages.success(request, 'New product has been added.')

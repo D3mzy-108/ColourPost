@@ -12,7 +12,8 @@ New Product
         <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
     </a>
 
-    <form action="" method="post" class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+    <form action="" method="post" enctype="multipart/form-data"
+        class="flex flex-col gap-4 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
         {% csrf_token %}
         {{product_form}}
 

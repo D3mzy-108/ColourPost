@@ -13,7 +13,8 @@
         <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
     </a>
 
-    <form action="" method="post" class="flex flex-col gap-6 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
+    <form action="" method="post" enctype="multipart/form-data"
+        class="flex flex-col gap-6 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-xl styled-form">
         {% csrf_token %}
         <div class="w-full flex flex-col gap-2">
             <h3 class="text-lg">
@@ -36,6 +37,19 @@
                     automatically from production)</span>
             </label>
             <h3 class="text-lg"># {{product.cost_price|comma_separated}}</h3>
+        </div>
+        <div class="w-full flex flex-col gap-2">
+            <label for="selling_price">
+                Product Image:
+                <br>
+                <span class="text-sm text-gray-600">Set the display image of this product in the store</span>
+            </label>
+            {% if product.image %}
+            <div class="w-[80px] h-[80px] grid place-items-center bg-gray-100">
+                <img src="{{product.image.url}}" class="w-full h-full">
+            </div>
+            {% endif %}
+            <input type="file" name="image" id="image" value="{{product.image}}" required>
         </div>
         <div class="w-full flex flex-col gap-2">
             <label for="selling_price">

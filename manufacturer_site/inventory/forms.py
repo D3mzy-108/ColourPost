@@ -24,7 +24,8 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = ('product_color',
+        fields = ('image',
+        'product_color',
                   'quantity_in_stock',
                   'cost_price',
                   'selling_price',

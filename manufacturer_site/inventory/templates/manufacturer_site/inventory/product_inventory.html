@@ -37,8 +37,10 @@ Product Inventory
             <tbody>
                 {% for product in products %}
                 <tr class="border-b border-b-black/20">
-                    <td class="py-2 px-2 font-normal text-start w-[50px]">
-                        {{forloop.counter}}
+                    <td class="py-2 px-1 font-normal text-start w-[50px]">
+                        {% if product.image %}
+                        <img src="{{product.image.url}}" alt="" class="w-full aspect-square bg-gray-100">
+                        {% endif %}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
                         {{product.product_color}}
