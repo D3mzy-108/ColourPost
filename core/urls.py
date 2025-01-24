@@ -30,4 +30,6 @@ urlpatterns = [
          include('manufacturer_site.inventory.urls')),
     path('manufacturer/production/',
          include('manufacturer_site.production.urls')),
+    path('manufacturer/cashier/',
+         include('manufacturer_site.cashier.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

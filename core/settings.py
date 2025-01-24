@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'manufacturer_site.inventory',
     'manufacturer_site.classifications',
     'manufacturer_site.production',
+    'manufacturer_site.cashier',
 ]
 
 MIDDLEWARE = [
