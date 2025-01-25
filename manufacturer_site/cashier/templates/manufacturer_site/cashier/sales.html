@@ -26,10 +26,10 @@ Sales
             <thead>
                 <tr class="border-b border-b-black/40">
                     <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
-                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Order</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Order Number</th>
                     <th class="py-2 px-2 font-normal text-start bg-gray-100">Client Name</th>
                     <th class="py-2 px-2 font-normal text-start bg-gray-100">Client Email</th>
-                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
                     <th class="py-2 px-2 font-normal text-start bg-gray-100">Order Value</th>
                     <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
                 </tr>
@@ -41,6 +41,9 @@ Sales
                         {{forloop.counter}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
+                        {{order.date}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
                         {{order.order_number}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
@@ -48,9 +51,6 @@ Sales
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
                         {{order.client_email}}
-                    </td>
-                    <td class="py-2 px-2 font-normal text-start">
-                        {{order.date}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
                         #{{order.total_cost|floatformat:2|comma_separated}}

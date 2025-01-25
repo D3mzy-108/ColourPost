@@ -23,17 +23,17 @@
 
         <!-- ORDER SUMMARY -->
         <div class="w-full flex gap-3">
-            <div class="w-full flex flex-col gap-2 rounded-lg p-4 shadow-md border">
+            <div class="flex-1 flex flex-col gap-2 rounded-lg p-4 shadow-md border">
                 <h4 class="text-lg">
                     {{order.client_name}}
                     <br>
                     <span class="text-sm text-gray-600" style="font-weight: 500;">
-                        {{order.client_email}}
+                        {{order.client_email}} - {{order.client_phone}}
                     </span>
                 </h4>
             </div>
 
-            <div class="w-full flex flex-col gap-2 rounded-lg p-4 shadow-md border">
+            <div class="flex-1 flex flex-col gap-2 rounded-lg p-4 shadow-md border">
                 <h4 class="text-lg">
                     <span class="text-sm text-gray-600" style="font-weight: 500;">
                         Order Value:
