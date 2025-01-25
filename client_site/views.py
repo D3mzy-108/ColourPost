@@ -30,6 +30,9 @@ def store(request):
         'packaging': Packaging.objects.all(),
         'product_types': ProductType.objects.all(),
         'cart': request.session.get('cart', []),
+        'query': query,
+        'product_type_query': int(f"{product_type}") if product_type else 0,
+        'package_query': int(f"{package}") if package else 0,
     }
     return render(request, 'client_site/store.html', context)
 
