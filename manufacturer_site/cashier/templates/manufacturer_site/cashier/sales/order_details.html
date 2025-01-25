@@ -1,0 +1,125 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+{% load custom_template_filters %}
+
+{% block title %}
+{{order}}
+{% endblock title %}
+
+{% block content %}
+<div class="w-full py-4">
+    <a href="{% url 'sales' %}"
+        class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-gray-700">
+        <iconify-icon icon="line-md:arrow-left" width="20" height="20"></iconify-icon>
+    </a>
+
+    <div class="flex flex-col gap-6 mt-4 sm:mt-8 px-4 sm:px-8 w-full max-w-2xl styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-2">
+            <h3 class="text-lg">
+                {{order.order_number}} - {{order.date}}
+            </h3>
+        </div>
+
+        <!-- ORDER SUMMARY -->
+        <div class="w-full flex gap-3">
+            <div class="w-full flex flex-col gap-2 rounded-lg p-4 shadow-md border">
+                <h4 class="text-lg">
+                    {{order.client_name}}
+                    <br>
+                    <span class="text-sm text-gray-600" style="font-weight: 500;">
+                        {{order.client_email}}
+                    </span>
+                </h4>
+            </div>
+
+            <div class="w-full flex flex-col gap-2 rounded-lg p-4 shadow-md border">
+                <h4 class="text-lg">
+                    <span class="text-sm text-gray-600" style="font-weight: 500;">
+                        Order Value:
+                    </span>
+                    <br>
+                    #{{order.total_cost|floatformat:2|comma_separated}}
+                </h4>
+            </div>
+        </div>
+
+        <!-- PURCHASED ITEMS -->
+        <div class="w-full flex flex-col gap-2 my-4">
+            <h4 class="text-md">Purchase Items</h4>
+            <table class="w-full table-auto">
+                <thead>
+                    <tr class="border border-gray-100 border-b-black/40">
+                        <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]"></th>
+                        <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                        <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity</th>
+                        <th class="py-2 px-2 font-normal text-start bg-gray-100">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.sales.all %}
+                    <tr class="border-b border-b-black/20">
+                        <td class="py-2 px-1 font-normal text-start min-w-[60px] w-[60px]">
+                            {% if item.product.image %}
+                            <img src="{{item.product.image.url}}" alt=""
+                                class="w-full aspect-square bg-gray-300 rounded-lg">
+                            {% endif %}
+                        </td>
+                        <td class="py-2 px-3 font-normal text-start">
+                            {{item.product.product_color}}
+                            {{item.product.product_type}}
+                            <br>
+                            <span class="text-sm text-gray-600">
+                                {{item.product.package.alias}}
+                                ({{item.product.package.volume}} lts)
+                            </span>
+                        </td>
+                        <td class="py-2 px-2 font-normal text-start">
+                            {{item.quantity_sold}}
+                        </td>
+                        <td class="py-2 px-2 font-normal text-start">
+                            #{{item.total_cost|floatformat:2|comma_separated}}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% if not order.sales %}
+                    <tr class="border border-dashed border-black/20">
+                        <td colspan="5" class="py-12 text-center text-gray-600">
+                            <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                                class="mx-auto"></iconify-icon>
+                            <br>
+                            No Items Found.
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- RECEIPT -->
+        <div class="w-full flex flex-col gap-2">
+            <label for="quantity_in_stock">
+                Purchase Receipt:
+                <br>
+                <span class="text-sm text-gray-600"></span>
+            </label>
+            <img src="{{order.proof_of_payment.url}}" alt="" class="w-full max-w-md bg-gray-100">
+        </div>
+    </div>
+</div>
+
+<style>
+    select {
+        font-weight: 700;
+        width: 100%;
+        max-width: 400px;
+        padding: 0.4rem 0.8rem;
+        background: #EEE;
+        border-radius: 12px;
+    }
+</style>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}

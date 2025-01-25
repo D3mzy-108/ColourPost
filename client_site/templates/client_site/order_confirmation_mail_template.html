@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load custom_template_filters %}
+
+{% block title %}
+Your ColourPost Order is Confirmed!
+{% endblock title %}
+
+{% block main %}
+<div class="w-full p-4">
+    <div>
+        <p>Dear {{ order.client_name }},</p>
+        <p>This email confirms the successful receipt of your recent order from ColourPost.</p>
+        <p>
+            To collect your order, simply present this email or the order number <b>"{{order.order_number}}"</b> to any
+            of our branch cashiers.
+        </p>
+        <p>
+            Here's a summary of your order:
+        </p>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: start;">Product</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: center;">Quantity</th>
+                    <th style="border: 1px solid #ddd; padding: 8px; text-align: start;">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.sales.all %}
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: start;">
+                        {{item.product.product_color}}
+                        {{item.product.product_type}}
+                        <br>
+                        <span class="text-sm text-gray-600">
+                            {{item.product.package.alias}}
+                            ({{item.product.package.volume}} lts)
+                        </span>
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: center;">
+                        {{item.quantity_sold}}
+                    </td>
+                    <td style="border: 1px solid #ddd; padding: 8px; text-align: start;">
+                        #{{item.total_cost|floatformat:2|comma_separated}}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>
+            We appreciate your business and look forward to serving you again soon.
+        </p>
+        <p>
+            Sincerely,<br>
+            The ColourPost Team
+        </p>
+    </div>
+
+</div>
+{% endblock main %}

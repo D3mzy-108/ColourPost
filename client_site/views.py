@@ -5,6 +5,10 @@ from django.db.models import Q
 from manufacturer_site.cashier.models import Order, Sale
 from manufacturer_site.production.views import _generate_random_string
 from django.contrib import messages
+# MAIL IMPORTS
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.conf import settings
 
 
 def home(request):
@@ -100,6 +104,24 @@ def make_payment(request):
             product.save()
         request.session['cart'] = []
         request.session['checkout'] = []
+
+        # SEND MAIL
+        html_message = render_to_string(
+            'client_site/order_confirmation_mail_template.html', {
+                'order': order,
+            })
+
+        subject = f'Your ColourPost Order is Confirmed - {order.order_number}'
+        from_email = settings.DEFAULT_FROM_EMAIL
+        recipient_list = [order.client_email]
+        send_mail(
+            subject,
+            '',
+            from_email,
+            recipient_list,
+            html_message=html_message,
+        )
+
         messages.success(
             request, 'Order has been recorded. You will receive an email containing the details of your order shortly.')
         return redirect('store')

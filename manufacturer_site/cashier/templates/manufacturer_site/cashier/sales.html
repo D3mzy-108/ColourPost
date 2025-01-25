@@ -1,0 +1,84 @@
+{% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load static %}
+{% load custom_template_filters %}
+
+{% block title %}
+Sales
+{% endblock title %}
+
+{% block content %}
+{% include './components/cashier_nav.html' %}
+
+<div class="w-full px-2 md:px-4 py-4">
+    <div class="w-full flex items-center mb-4">
+        <form class="flex-1 styled-form">
+            <input type="search" name="q" id="search_orders" class="w-full max-w-lg"
+                placeholder="Search by Order Number or Client" value="{{search_query}}">
+        </form>
+        <a href="{% url 'store' %}" target="_blank"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-1 w-fit items-center">
+            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
+            <span>New Order</span>
+        </a>
+    </div>
+    <div class="w-full overflow-auto rounded-xl">
+        <table class="w-full table-auto">
+            <thead>
+                <tr class="border-b border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Order</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Client Name</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Client Email</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Order Value</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-1 font-normal text-start w-[50px]">
+                        {{forloop.counter}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{order.order_number}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{order.client_name}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{order.client_email}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{order.date}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        #{{order.total_cost|floatformat:2|comma_separated}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        <a href="{% url 'order_details' order.id %}"
+                            class="w-fit grid place-items-center rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
+                            <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not orders %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="7" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Orders Found
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/form-utils/input-style.js' %}"></script>
+{% endblock scripts %}
