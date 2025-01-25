@@ -7,6 +7,7 @@ class Order(models.Model):
     total_cost = models.FloatField(default=0.0)
     client_name = models.CharField(max_length=100)
     client_email = models.EmailField()
+    client_phone = models.CharField(max_length=15, null=True)
     proof_of_payment = models.FileField(
         upload_to='proof-of-payment/', null=True)
     date = models.DateField(auto_now_add=True)

@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Order, Sale
+from django.shortcuts import render, get_object_or_404
+from .models import Order
 from django.db.models import Q
 
 

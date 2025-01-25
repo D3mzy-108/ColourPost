@@ -95,6 +95,7 @@ def make_payment(request):
             total_cost=sum([float(item.total_cost) for item in order_items]),
             client_name=request.POST.get('client_name'),
             client_email=request.POST.get('client_email'),
+            client_phone=request.POST.get('client_phone'),
             proof_of_payment=request.FILES.get('proof_of_payment')
         )
         order.save()
