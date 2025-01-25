@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import RawMaterial, MaterialPurchaseLog
 from manufacturer_site.classifications.models import Product
-from django.db.models import Q, ExpressionWrapper, F, FloatField
+from django.db.models import Q, ExpressionWrapper, F, FloatField, Sum
 from .forms import RawMaterialForm, MaterialPurchaseLogForm, ProductForm
 from django.contrib import messages
 
@@ -18,8 +18,15 @@ def product_inventory(request):
         market_value=ExpressionWrapper(
             F('selling_price') * F('quantity_in_stock'), output_field=FloatField()),
         true_value=ExpressionWrapper(F('cost_price') * F('quantity_in_stock'), output_field=FloatField())).order_by('-id')
+    inventory_summary = products.aggregate(
+        total_market_value=Sum(ExpressionWrapper(
+            F('selling_price') * F('quantity_in_stock'), output_field=FloatField())),
+        total_true_value=Sum(ExpressionWrapper(
+            F('cost_price') * F('quantity_in_stock'), output_field=FloatField())))
+
     context = {
         'products': products,
+        'inventory_summary': inventory_summary,
     }
     return render(request, 'manufacturer_site/inventory/product_inventory.html', context)
 
@@ -63,12 +70,13 @@ def raw_materials(request):
         Q(name__icontains=query) |
         Q(alias__icontains=query) |
         Q(code__icontains=query)
-    ).order_by('-id')
+    ).annotate(total_value=ExpressionWrapper(F('quantity_in_stock') * F('cost_price'), output_field=FloatField())).order_by('-id')
     low_stock_raw_materials = RawMaterial.objects.filter(
         quantity_in_stock__lt=50).order_by('-id')
     context = {
         'raw_materials': raw_materials,
         'low_stock_raw_materials': low_stock_raw_materials,
+        'inventory_summary': raw_materials.aggregate(stock_value=Sum('total_value')),
     }
     return render(request, 'manufacturer_site/inventory/raw_materials.html', context)
 
