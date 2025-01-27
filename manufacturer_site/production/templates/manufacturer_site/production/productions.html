@@ -6,15 +6,12 @@ Productions
 
 {% block content %}
 <div class="w-full px-2 md:px-4 py-4">
-    <div class="w-full flex max-sm:flex-col gap-2 items-center mb-4">
-        <div class="w-full max-w-lg mr-auto">
+    <div class="w-full flex flex-wrap gap-2 items-center mb-4">
+        <div class="w-full max-w-xs">
             <div class="w-full">
                 <form action="" method="get" class="w-full flex max-sm:flex-col">
-                    <input type="search" name="q" id="search"
-                        class="w-full sm:flex-1 bg-transparent border border-black/20 rounded-t-lg sm:rounded-tr-none sm:rounded-l-lg text-gray-700 px-4 py-2"
-                        placeholder="Search for materials">
                     <input type="date" name="date" id="date"
-                        class="w-full sm:flex-1 bg-transparent border border-black/20 sm:border-x-transparent rounded-b-lg sm:rounded-b-none text-gray-700 px-4 py-2"
+                        class="w-full sm:flex-1 bg-transparent border border-black/20 sm:border-r-transparent rounded-lg sm:rounded-r-none text-gray-700 px-4 py-2"
                         placeholder="Search for materials">
                     <button
                         class="px-3 py-2 max-sm:mt-2 bg-[var(--highlight)] text-white rounded-lg sm:rounded-l-none grid place-items-center border border-[var(--highlight)]">
@@ -24,61 +21,73 @@ Productions
             </div>
         </div>
         <a href="{% url 'new_production' %}"
-            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-full sm:w-fit items-center justify-center">
-            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
-            <span>New Production</span>
+            class="bg-[var(--highlight)] text-white p-3 rounded-lg flex gap-2 max-sm:flex-1 sm:w-fit items-center justify-center">
+            <iconify-icon icon="basil:add-solid" width="20" height="20"></iconify-icon>
+            <span class="text-sm">New Production</span>
+        </a>
+        <a href="{% url 'classifications' %}"
+            class="bg-[var(--highlight)] text-white p-3 rounded-lg flex gap-2 max-sm:flex-1 sm:w-fit items-center justify-center">
+            <span class="text-sm">Product Options</span>
+            <iconify-icon icon="ep:right" width="18" height="18"></iconify-icon>
         </a>
     </div>
 
-    <table class="w-full table-auto rounded-xl overflow-hidden">
-        <thead>
-            <tr class="border border-gray-100 border-b-black/40">
-                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Production Code</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for production in productions %}
-            <tr class="border-b border-b-black/20">
-                <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
-                <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
-                    {{production.production_code}}
-                    {% if production.is_completed %}
-                    <div class="w-[7px] h-[7px] rounded-full bg-green-400"></div>
-                    {% else %}
-                    <div class="w-[7px] h-[7px] rounded-full bg-yellow-400"></div>
-                    {% endif %}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{production.date}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start flex gap-2">
-                    {% if not production.is_completed %}
-                    <button onclick="deleteProduction('{{production.id}}', '{{production.production_code}}')"
-                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
-                        <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
-                    </button>
-                    {% endif %}
-                    <a href="{% url 'production_details' production.id %}"
-                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
-                        <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% if not productions %}
-            <tr class="border border-dashed border-black/20">
-                <td colspan="5" class="py-12 text-center text-gray-600">
-                    <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
-                    <br>
-                    No Production Recorded
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
+    <div class="w-full overflow-auto">
+        <table class="w-full table-auto rounded-xl overflow-hidden">
+            <thead>
+                <tr class="border border-gray-100 border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Date</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Production Code</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for production in productions %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{production.date}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
+                        {{production.production_code}}
+                        {% if production.is_completed %}
+                        <div class="w-[7px] h-[7px] rounded-full bg-green-400"></div>
+                        {% else %}
+                        <div class="w-[7px] h-[7px] rounded-full bg-yellow-400"></div>
+                        {% endif %}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{production.product_type}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start flex gap-2">
+                        {% if not production.is_completed %}
+                        <button onclick="deleteProduction('{{production.id}}', '{{production.production_code}}')"
+                            class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                            <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                        </button>
+                        {% endif %}
+                        <a href="{% url 'production_details' production.id %}"
+                            class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
+                            <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not productions %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="5" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Production Recorded
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock content %}

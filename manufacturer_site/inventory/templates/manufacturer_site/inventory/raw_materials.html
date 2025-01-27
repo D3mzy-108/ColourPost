@@ -9,27 +9,117 @@ Raw Materials
 {% include './components/inventory_nav.html' %}
 
 <div class="w-full px-2 md:px-4 py-4">
-    <div class="w-full mb-8">
-        <div class="flex items-center">
-            <legend class="text-md font-semibold">Low Stock</legend>
+    <!-- PAGE ACTIONS -->
+    <div class="w-full flex flex-wrap gap-2 items-center mb-8">
+        <div class="w-full max-w-md">
+            <div class="w-full">
+                <form action="" method="get" class="w-full flex">
+                    <input type="search" name="q" id="search"
+                        class="flex-1 bg-transparent border border-black/20 rounded-l-lg text-gray-700 px-4 py-2"
+                        placeholder="Search for materials">
+                    <button
+                        class="px-3 bg-gray-100 text-gray-700 rounded-r-lg grid place-items-center border border-black/20">
+                        <iconify-icon icon="iconamoon:search" width="20" height="20"></iconify-icon>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <a href="{% url 'add_raw_materials' %}"
+            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 max-sm:flex-1 sm:w-fit items-center justify-center">
+            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
+            <span>New Material</span>
+        </a>
+        <a href="{% url 'material_purchase_log' %}"
+            class="text-blue-700 px-3 py-2 rounded-lg flex gap-2 max-sm:flex-1 sm:w-fit items-center justify-center">
+            <span>Purchases</span>
+            <span class="text-lg">&raquo;</span>
+        </a>
+    </div>
 
-            <a href="{% url 'material_purchase_log' %}" class="text-blue-700 flex gap-2 w-fit items-center ml-auto">
-                <span>Purchases</span>
-                <span class="text-lg">&raquo;</span>
-            </a>
+    <!-- LOW STOCK ALARMS -->
+    <div class="w-full flex max-sm:flex-col-reverse gap-4 mb-8">
+        <div class="sm:flex-1 max-sm:w-full p-3 bg-red-50 rounded-lg grid place-items-center">
+            <button onclick="$('#lowStockTable').slideToggle(300)" class="w-full flex items-center">
+                <div class="border-none bg-transparent flex-1 text-md font-semibold text-start text-red-700">
+                    Low Stock Alarms
+                    <small class="text-red-600">({{low_stock_raw_materials.count}})</small>
+                </div>
+                <span>&blacktriangledown;</span>
+            </button>
+
+            <div id="lowStockTable" class="w-full overflow-auto" style="display: none;">
+                <table class="w-full table-auto rounded-xl overflow-hidden mt-4">
+                    <thead>
+                        <tr class="border-b border-b-black/40">
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Materials</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Qty</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for material in low_stock_raw_materials %}
+                        <tr class="border-b border-b-black/20">
+                            <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                            <td class="py-2 px-2 font-normal text-start">
+                                {{material.name}} -
+                                <span class="text-xs">({{material.alias}})</span>
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start">
+                                {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start flex gap-2">
+                                <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
+                                    class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
+                                    <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
+                                    <span class="text-sm">Restock</span>
+                                </a>
+                                <button onclick="deleteMaterial('{{material.id}}', '{{material.name}}')"
+                                    class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                                    <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% if not low_stock_raw_materials %}
+                        <tr class="border border-dashed border-black/20">
+                            <td colspan="4" class="py-12 text-center text-gray-600">
+                                <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                                    class="mx-auto"></iconify-icon>
+                                <br>
+                                No Raw Materials with Low Stock
+                            </td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
         </div>
 
-        <table class="w-full table-auto rounded-xl overflow-hidden mt-4">
+        <div
+            class="w-full max-w-md max-sm:w-full p-4 bg-green-50 rounded-lg text-start sm:text-center grid place-items-center place-content-center">
+            <span class="text-green-700">Total Stock Value</span>
+            <h3 class="text-xl">
+                #{{inventory_summary.stock_value|floatformat:2|comma_separated}}
+            </h3>
+        </div>
+    </div>
+
+    <!-- RAW MATERIALS LIST -->
+    <div class="w-full overflow-auto">
+        <table class="w-full table-auto rounded-xl overflow-hidden">
             <thead>
                 <tr class="border-b border-b-black/40">
                     <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
-                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Materials</th>
-                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Qty</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Stock Items</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Rate</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Total</th>
                     <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
                 </tr>
             </thead>
             <tbody>
-                {% for material in low_stock_raw_materials %}
+                {% for material in raw_materials %}
                 <tr class="border-b border-b-black/20">
                     <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
                     <td class="py-2 px-2 font-normal text-start">
@@ -38,6 +128,12 @@ Raw Materials
                     </td>
                     <td class="py-2 px-2 font-normal text-start">
                         {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        #{{material.cost_price|floatformat:2|comma_separated}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        #{{material.total_value|floatformat:2|comma_separated}}
                     </td>
                     <td class="py-2 px-2 font-normal text-start flex gap-2">
                         <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
@@ -52,98 +148,19 @@ Raw Materials
                     </td>
                 </tr>
                 {% endfor %}
-                {% if not low_stock_raw_materials %}
+                {% if not raw_materials %}
                 <tr class="border border-dashed border-black/20">
                     <td colspan="4" class="py-12 text-center text-gray-600">
                         <iconify-icon icon="stash:subscription-list" width="32" height="32"
                             class="mx-auto"></iconify-icon>
                         <br>
-                        No Raw Materials with Low Stock
+                        No Raw Materials added
                     </td>
                 </tr>
                 {% endif %}
             </tbody>
         </table>
     </div>
-    <div class="w-full flex max-sm:flex-col gap-2 items-center mb-4">
-        <div class="max-sm:w-full flex-1 sm:pr-8">
-            <div class="w-full">
-                <form action="" method="get" class="w-full flex">
-                    <input type="search" name="q" id="search"
-                        class="flex-1 bg-transparent border border-black/20 rounded-l-lg text-gray-700 px-4 py-2"
-                        placeholder="Search for materials">
-                    <button
-                        class="px-3 bg-gray-100 text-gray-700 rounded-r-lg grid place-items-center border border-black/20">
-                        <iconify-icon icon="iconamoon:search" width="20" height="20"></iconify-icon>
-                    </button>
-                </form>
-            </div>
-        </div>
-        <a href="{% url 'add_raw_materials' %}"
-            class="bg-[var(--highlight)] text-white px-3 py-2 rounded-lg flex gap-2 w-full sm:w-fit items-center justify-center">
-            <iconify-icon icon="basil:add-solid" width="24" height="24"></iconify-icon>
-            <span>New Material</span>
-        </a>
-    </div>
-    <table class="w-full table-auto rounded-xl overflow-hidden">
-        <thead>
-            <tr class="border-b border-b-black/40">
-                <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Materials</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Quantity</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Rate</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Total</th>
-                <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="border-b border-b-black/20">
-                <th colspan="3" class="py-2 px-2 font-medium text-start"></th>
-                <th class="py-2 px-2 font-medium text-start">Stock Value:</th>
-                <td colspan="2" class="py-2 px-2 font-medium text-start">
-                    #{{inventory_summary.stock_value|floatformat:2|comma_separated}}
-                </td>
-            </tr>
-            {% for material in raw_materials %}
-            <tr class="border-b border-b-black/20">
-                <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{material.name}} -
-                    <span class="text-xs">({{material.alias}})</span>
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    #{{material.cost_price|floatformat:2|comma_separated}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start">
-                    #{{material.total_value|floatformat:2|comma_separated}}
-                </td>
-                <td class="py-2 px-2 font-normal text-start flex gap-2">
-                    <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
-                        class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
-                        <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
-                        <span class="text-sm">Restock</span>
-                    </a>
-                    <button onclick="deleteMaterial('{{material.id}}', '{{material.name}}')"
-                        class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
-                        <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-            {% if not raw_materials %}
-            <tr class="border border-dashed border-black/20">
-                <td colspan="4" class="py-12 text-center text-gray-600">
-                    <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
-                    <br>
-                    No Raw Materials added
-                </td>
-            </tr>
-            {% endif %}
-        </tbody>
-    </table>
 </div>
 
 <script>

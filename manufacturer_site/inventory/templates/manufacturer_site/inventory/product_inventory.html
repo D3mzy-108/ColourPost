@@ -21,15 +21,15 @@ Product Inventory
     </div>
     <div class="w-full flex gap-4 pt-4 pb-6">
         <div class="flex-1 rounded-lg border border-[#65B5A330] bg-[#65B5A310] p-4">
-            <span class="text-[var(--highlight)]">Total True Value</span>
+            <span class="text-[var(--highlight)]">Production Cost</span>
             <h3 class="text-lg">
-                #{{inventory_summary.total_true_value|comma_separated}}
+                #{{inventory_summary.total_true_value|floatformat:2|comma_separated}}
             </h3>
         </div>
         <div class="flex-1 rounded-lg border border-[#65B5A330] bg-[#65B5A310] p-4">
-            <span class="text-[var(--highlight)]">Total Market Value</span>
+            <span class="text-[var(--highlight)]">Market Value</span>
             <h3 class="text-lg">
-                #{{inventory_summary.total_market_value|comma_separated}}
+                #{{inventory_summary.total_market_value|floatformat:2|comma_separated}}
             </h3>
         </div>
     </div>
