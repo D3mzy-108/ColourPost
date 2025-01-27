@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Production, ProductionResource, ProductionBatch, BatchItem
+from .models import Production, ProductionResource, AdditionalProductionResource, ProductionBatch, BatchItem
 
 
 @admin.register(Production)
@@ -16,6 +16,15 @@ class ProductionResourceAdmin(admin.ModelAdmin):
                     'material', 'quantity_used', 'ttl_cost')
     search_fields = ('production__production_code',
                      'material__name')
+    list_filter = ('production__date', 'production__is_completed')
+
+
+@admin.register(AdditionalProductionResource)
+class AdditionalProductionResourceAdmin(admin.ModelAdmin):
+    list_display = ('production',
+                    'material', 'quantity_used', 'ttl_cost')
+    search_fields = ('production__production_code',
+                     'material')
     list_filter = ('production__date', 'production__is_completed')
 
 

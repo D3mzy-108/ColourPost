@@ -58,6 +58,46 @@ class ProductionResource(models.Model):
         return self.production.production_code
 
 
+class AdditionalProductionResource(models.Model):
+    production = models.ForeignKey(
+        Production, on_delete=models.CASCADE, related_name='additional_resources')
+    material = models.CharField(max_length=50)
+    quantity_used = models.FloatField(default=0.0)
+    ttl_cost = models.FloatField(default=0.0)
+
+    class Meta:
+        verbose_name = 'AdditionalProductionResource'
+        verbose_name_plural = 'AdditionalProductionResources'
+
+    def save(self, *args):
+        # CALCULATE COST
+        material_cost = self.material.cost_price
+        ttl_cost = (material_cost * self.quantity_used)
+        self.ttl_cost = ttl_cost
+
+        # CALCULATE BATCH COST
+        batch = ProductionBatch.objects.get(production=self.production)
+        production_cost = 0
+        for resource in AdditionalProductionResource.objects.filter(production__id=self.production.id):
+            if self.pk == resource.pk:
+                production_cost += self.ttl_cost
+            else:
+                production_cost += resource.ttl_cost
+        batch.ttl_cost = production_cost
+        batch.save()
+
+        return super().save()
+
+    def delete(self, *args):
+        batch = ProductionBatch.objects.get(production=self.production)
+        batch.ttl_cost -= self.ttl_cost
+        batch.save()
+        return super().delete()
+
+    def __str__(self):
+        return self.production.production_code
+
+
 class ProductionBatch(models.Model):
     production = models.OneToOneField(
         Production, on_delete=models.CASCADE, related_name='batch')
