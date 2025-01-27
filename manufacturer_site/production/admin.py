@@ -22,7 +22,7 @@ class ProductionResourceAdmin(admin.ModelAdmin):
 @admin.register(AdditionalProductionResource)
 class AdditionalProductionResourceAdmin(admin.ModelAdmin):
     list_display = ('production',
-                    'material', 'quantity_used', 'ttl_cost')
+                    'material', 'ttl_cost')
     search_fields = ('production__production_code',
                      'material')
     list_filter = ('production__date', 'production__is_completed')

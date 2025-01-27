@@ -9,7 +9,9 @@ from .views import (productions,
                     production_details,
                     remove_package_item,
                     add_production_resource,
+                    add_additional_resources,
                     remove_production_resource,
+                    remove_additional_resources,
                     navigate_production_environment)
 
 urlpatterns = [
@@ -29,6 +31,10 @@ urlpatterns = [
          add_production_resource, name='add_production_resource'),
     path('remove-resources/',
          remove_production_resource, name='remove_production_resource'),
+    path('<int:production_id>/add-additional-resources/',
+         add_additional_resources, name='add_additional_resources'),
+    path('remove-additional-resources/',
+         remove_additional_resources, name='remove_additional_resources'),
 
     # BATCH URLS
     path('<int:production_id>/batch-details/',

@@ -72,6 +72,64 @@
         {% endif %}
     </form>
 
+    <form action="{% url 'add_additional_resources' production.id %}" method="post"
+        class="flex flex-col gap-4 mt-4 sm:mt-6 px-4 sm:px-8 w-full styled-form">
+        {% csrf_token %}
+        <div class="w-full flex flex-col gap-4">
+            <label for="">
+                <span class="font-medium text-lg">Additional Production Costs:</span>
+                <br>
+                <span class="text-sm text-gray-600">Additional costs for this production. (e.g labour cost, cost of
+                    production, etc.)</span>
+            </label>
+
+            <div class="table-wrapper max-w-full rounded-xl overflow-auto">
+                <table class="w-full table-auto">
+                    <thead>
+                        <tr class="border border-gray-100 border-b-black/40">
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Material</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Total Cost</th>
+                            <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for resource in production.additional_resources.all %}
+                        <tr class="border-b border-b-black/20">
+                            <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                            <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
+                                {{resource.material}}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start">
+                                #{{resource.ttl_cost|comma_separated}}
+                            </td>
+                            <td class="py-2 px-2 font-normal text-start flex gap-2">
+                                <button type="button"
+                                    onclick="removeAdditionalResource('{{resource.id}}', '{{resource.material}}')"
+                                    class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                                    <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% if not production.is_completed %}
+        <button type="button" class="mt-4 text-blue-700 text-start"
+            onclick="$('#addAdditionalResourceForm').slideToggle()">
+            &plus; New Additional Resource
+        </button>
+        <div class="w-full max-w-sm mt-2 flex flex-col gap-4 items-start" style="display: none;"
+            id="addAdditionalResourceForm">
+            <input type="text" name="material" class="w-full" id="material" placeholder="Resource Name" required>
+            <input type="number" name="ttl_cost" class="w-full" id="ttl_cost" placeholder="Cost of Resource" required>
+            <button type="submit" class="px-4 py-2 bg-[var(--highlight)] text-white rounded-lg">Save</button>
+        </div>
+        {% endif %}
+    </form>
+
     {% include './components/production_footer_navigation.html' %}
 
 </div>
@@ -93,6 +151,11 @@
     function removeResource(id, resourceName) {
         if (confirm(`Are you sure you want to delete ${resourceName}?\nAll records related to this item will be deleted`)) {
             window.location.replace(`{% url 'remove_production_resource' %}?id=${id}`)
+        }
+    }
+    function removeAdditionalResource(id, resourceName) {
+        if (confirm(`Are you sure you want to delete ${resourceName}?\nAll records related to this item will be deleted`)) {
+            window.location.replace(`{% url 'remove_additional_resources' %}?id=${id}`)
         }
     }
 </script>

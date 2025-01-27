@@ -33,6 +33,7 @@ class ProductionResource(models.Model):
         # CALCULATE COST
         material_cost = self.material.cost_price
         ttl_cost = (material_cost * self.quantity_used)
+        print(ttl_cost)
         self.ttl_cost = ttl_cost
 
         # CALCULATE BATCH COST
@@ -40,9 +41,11 @@ class ProductionResource(models.Model):
         production_cost = 0
         for resource in ProductionResource.objects.filter(production__id=self.production.id):
             if self.pk == resource.pk:
-                production_cost += self.ttl_cost
+                production_cost += ttl_cost
             else:
                 production_cost += resource.ttl_cost
+        for resource in AdditionalProductionResource.objects.filter(production__id=self.production.id):
+            production_cost += resource.ttl_cost
         batch.ttl_cost = production_cost
         batch.save()
 
@@ -62,7 +65,6 @@ class AdditionalProductionResource(models.Model):
     production = models.ForeignKey(
         Production, on_delete=models.CASCADE, related_name='additional_resources')
     material = models.CharField(max_length=50)
-    quantity_used = models.FloatField(default=0.0)
     ttl_cost = models.FloatField(default=0.0)
 
     class Meta:
@@ -70,19 +72,20 @@ class AdditionalProductionResource(models.Model):
         verbose_name_plural = 'AdditionalProductionResources'
 
     def save(self, *args):
-        # CALCULATE COST
-        material_cost = self.material.cost_price
-        ttl_cost = (material_cost * self.quantity_used)
-        self.ttl_cost = ttl_cost
-
         # CALCULATE BATCH COST
         batch = ProductionBatch.objects.get(production=self.production)
         production_cost = 0
+        for resource in ProductionResource.objects.filter(production__id=self.production.id):
+            production_cost += resource.ttl_cost
+        new_instance_added = False
         for resource in AdditionalProductionResource.objects.filter(production__id=self.production.id):
             if self.pk == resource.pk:
-                production_cost += self.ttl_cost
+                production_cost += float(f'{self.ttl_cost}')
+                new_instance_added = True
             else:
                 production_cost += resource.ttl_cost
+        if not new_instance_added:
+            production_cost += float(f'{self.ttl_cost}')
         batch.ttl_cost = production_cost
         batch.save()
 

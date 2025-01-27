@@ -4,7 +4,8 @@ from datetime import datetime
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import Production, ProductionResource, ProductionBatch, BatchItem
+from django.views.decorators.http import require_POST
+from .models import Production, ProductionResource, ProductionBatch, BatchItem, AdditionalProductionResource
 from manufacturer_site.classifications.models import ProductType, Product
 from manufacturer_site.inventory.models import RawMaterial
 from django.db.models import Q, F, ExpressionWrapper, FloatField
@@ -33,7 +34,9 @@ def _active_steps(production_id) -> int:
 
 @login_required
 def productions(request):
-    productions = Production.objects.all().order_by('-id', '-date')
+    date_query = request.GET.get('date', '')
+    productions = Production.objects.filter(
+        date__icontains=date_query).order_by('-id', '-date')
     context = {
         'productions': productions,
     }
@@ -206,7 +209,35 @@ def remove_production_resource(request):
     else:
         messages.error(
             request, f'Production environment has already been closed')
-    return redirect('production_details', resource.production.id)
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+@require_POST
+def add_additional_resources(request, production_id):
+    production = get_object_or_404(Production, pk=production_id)
+    material = request.POST.get('material')
+    ttl_cost = request.POST.get('ttl_cost')
+    additional_resource = AdditionalProductionResource()
+    additional_resource.production = production
+    additional_resource.material = material
+    additional_resource.ttl_cost = ttl_cost
+    additional_resource.save()
+    return redirect(request.META.get('HTTP_REFERER'))
+
+
+@login_required
+def remove_additional_resources(request):
+    resource_id = request.GET.get('id')
+    resource = get_object_or_404(AdditionalProductionResource, id=resource_id)
+    if not resource.production.is_completed:
+        resource.delete()
+        messages.info(
+            request, f'{resource.material} has been removed from additional production resources')
+    else:
+        messages.error(
+            request, f'Production environment has already been closed')
+    return redirect(request.META.get('HTTP_REFERER'))
 
 
 # =====================================================================
@@ -310,6 +341,7 @@ def add_package_item(request, production_id):
         item.product.id for item in included_products
     ]
     excluded_materials = Product.objects.filter(
+        Q(product_type=production.product_type) &
         Q(product_type__name__icontains=query)
     ).exclude(id__in=included_materials_list)
 
