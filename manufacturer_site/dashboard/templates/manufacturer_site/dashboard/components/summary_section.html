@@ -1,0 +1,56 @@
+{% load custom_template_filters %}
+
+<div class="w-full">
+    <div class="w-full py-3">
+        <div class="w-full p-2 backdrop-blur-md rounded-xl bg-white/10 flex gap-4 items-center">
+            <div class="flex-1 border-y"></div>
+            <legend class="text-md font-medium uppercase">Summary</legend>
+            <div class="flex-1 border-y"></div>
+        </div>
+    </div>
+
+    <div class="w-full flex overflow-auto md:grid md:grid-cols-3 gap-3 px-2 sm:px-4">
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Total Stock Value</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.ttl_stock_value|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Produced Batch Value</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.ttl_batch_value|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Produced Batch Cost</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Sellable Stock Value</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.sellable_stock_value|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Sales Revenue</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.sales_revenue|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+            <span class="text-sm text-gray-700">Total Expenses</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.ttl_expenses|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+    </div>
+</div>

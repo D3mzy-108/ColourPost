@@ -39,7 +39,8 @@ def dashboard(request):
             ('7', '7 days'),
             ('mtd', 'This Month'),
             ('ytd', 'This Year'),
-        ]
+        ],
+        'low_stock_raw_materials': raw_materials.filter(quantity_in_stock__lt=50).order_by('-id'),
     }
     return render(request, 'manufacturer_site/dashboard/dashboard.html', context)
 
