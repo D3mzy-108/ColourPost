@@ -1,9 +1,120 @@
 {% extends 'manufacturer_site/dashboard_layout.html' %}
+{% load custom_template_filters %}
 
 {% block title %}
 Dashboard
 {% endblock title %}
 
 {% block content %}
-<h1>Dashboard</h1>
+<div class="w-full relative">
+
+    <!-- Raw Materials Management -->
+    <section class="w-full">
+        {% include './components/filters.html' %}
+        <div class="w-full py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Summary</legend>
+            </div>
+        </div>
+
+        <div class="w-full grid grid-cols-2 md:grid-cols-3 gap-3 px-4">
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Total Stock Value</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.ttl_stock_value|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Produced Batch Value</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.ttl_batch_value|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Produced Batch Cost</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Sellable Stock Value</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.sellable_stock_value|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Sales Revenue</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.sales_revenue|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+            <div
+                class="w-full flex-1 rounded-lg p-3 text-center bg-gray-100 grid place-items-center place-content-center">
+                <span class="text-sm text-gray-700">Total Expenses</span>
+                <legend class="text-lg font-semibold">
+                    #{{summary.ttl_expenses|floatformat:2|comma_separated}}
+                </legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Production Metrics -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Production Metrics</legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inventory Management -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Inventory Management</legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sales Metrics -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Sales Metrics</legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Financial Metrics -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Financial Metrics</legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expense Tracking -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Expense Tracking</legend>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance Indicators -->
+    <section class="w-full">
+        <div class="w-full sticky top-0 py-3">
+            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
+                <legend class="text-md font-medium">Performance Indicators</legend>
+            </div>
+        </div>
+    </section>
+</div>
 {% endblock content %}
