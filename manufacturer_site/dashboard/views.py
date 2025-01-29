@@ -48,7 +48,7 @@ def dashboard(request):
     return render(request, 'manufacturer_site/dashboard/dashboard.html', context)
 
 
-def _get_summary(materials, productions, products, sales, material_purchases) -> dict[str, any]:
+def _get_summary(materials, productions, products, sales, material_purchases) -> dict:
     # MATERIAL SUMMARY
     materials_summary = materials.aggregate(stock_value=Sum(ExpressionWrapper(
         F('quantity_in_stock') * F('cost_price'), output_field=FloatField()
