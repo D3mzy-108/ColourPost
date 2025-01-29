@@ -1,4 +1,5 @@
 import datetime
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -41,6 +42,8 @@ def dashboard(request):
             ('ytd', 'This Year'),
         ],
         'low_stock_raw_materials': raw_materials.filter(quantity_in_stock__lt=50).order_by('-id'),
+        'live_productions': productions.filter(is_completed=False),
+        'production_cost_over_time': _get_production_cost_over_time(productions),
     }
     return render(request, 'manufacturer_site/dashboard/dashboard.html', context)
 
@@ -83,3 +86,19 @@ def _get_summary(materials, productions, products, sales, material_purchases) ->
         'sales_revenue': sales_summary['revenue'] or 0.0,
         'ttl_expenses': (material_purchases_summary['total_cost'] or 0.0) + ttl_additional_costs,
     }
+
+
+def _get_production_cost_over_time(productions) -> str:
+    ctx = {
+        'x': [],
+        'y': [],
+    }
+    for production in productions:
+        p_date = datetime.datetime.strftime(production.date, '%d %b, %Y')
+        if p_date in ctx['x']:
+            ctx['y'][ctx['x'].index(p_date)
+                     ] += production.batch.ttl_cost
+        else:
+            ctx['x'].append(p_date)
+            ctx['y'].append(production.batch.ttl_cost)
+    return json.dumps(ctx)

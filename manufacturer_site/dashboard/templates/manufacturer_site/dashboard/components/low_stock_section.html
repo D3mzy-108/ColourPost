@@ -1,0 +1,59 @@
+{% load custom_template_filters %}
+
+<div class="w-full bg-red-50 rounded-lg grid place-items-center">
+    <button onclick="$('#lowStockTable').slideToggle(300)" class="w-full p-3 pb-1 flex items-center">
+        <div class="border-none bg-transparent flex-1 text-md font-semibold text-start text-red-700">
+            Low Stock Alarms
+            <small class="bg-red-600 px-2 rounded-full text-white">{{low_stock_raw_materials.count}}</small>
+        </div>
+        <span>&blacktriangledown;</span>
+    </button>
+
+    <div id="lowStockTable" class="w-full max-h-[50vh] overflow-auto">
+        <table class="w-full table-auto rounded-b-xl overflow-hidden mt-4">
+            <thead>
+                <tr class="border-b border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-red-700/10 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-red-700/10">Materials</th>
+                    <th class="py-2 px-2 font-normal text-start bg-red-700/10">Qty</th>
+                    <th class="py-2 px-2 font-normal text-start bg-red-700/10">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in low_stock_raw_materials %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{material.name}} -
+                        <span class="text-xs">({{material.alias}})</span>
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{material.quantity_in_stock|comma_separated}} {{material.measurement_unit}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start flex gap-2">
+                        <a href="{% url 'create_purchase_log' %}?mid={{material.id}}"
+                            class="w-fit flex items-center gap-2 rounded-full px-3 py-2 bg-white shadow-md border text-blue-700">
+                            <iconify-icon icon="hugeicons:package-add" width="20" height="20"></iconify-icon>
+                            <span class="text-sm">Restock</span>
+                        </a>
+                        <button onclick="deleteMaterial('{{material.id}}', '{{material.name}}')"
+                            class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-red-700">
+                            <iconify-icon icon="mingcute:delete-line" width="20" height="20"></iconify-icon>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% if not low_stock_raw_materials %}
+                <tr class="border border-dashed border-black/20">
+                    <td colspan="4" class="py-12 text-center text-gray-600">
+                        <iconify-icon icon="stash:subscription-list" width="32" height="32"
+                            class="mx-auto"></iconify-icon>
+                        <br>
+                        No Raw Materials with Low Stock
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>

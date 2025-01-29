@@ -1,0 +1,50 @@
+{% load custom_template_filters %}
+
+<div class="w-full">
+    <div class="w-full overflow-auto">
+        {% if not live_productions %}
+        <div class="w-full border border-dashed border-black/20">
+            <div class="py-12 text-center text-gray-600">
+                <iconify-icon icon="stash:subscription-list" width="32" height="32" class="mx-auto"></iconify-icon>
+                <br>
+                No Live Productions
+            </div>
+        </div>
+        {% else %}
+        <table class="w-full table-auto rounded-xl overflow-hidden">
+            <thead>
+                <tr class="border border-gray-100 border-b-black/40">
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100 w-[50px]">SN</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Production Code</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Product</th>
+                    <th class="py-2 px-2 font-normal text-start bg-gray-100">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for production in live_productions %}
+                <tr class="border-b border-b-black/20">
+                    <td class="py-2 px-2 font-normal text-start w-[50px]">{{forloop.counter}}</td>
+                    <td class="py-2 px-2 font-normal text-start flex gap-3 items-center">
+                        {{production.production_code}}
+                        {% if production.is_completed %}
+                        <div class="w-[7px] h-[7px] rounded-full bg-green-400"></div>
+                        {% else %}
+                        <div class="w-[7px] h-[7px] rounded-full bg-yellow-400"></div>
+                        {% endif %}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start">
+                        {{production.product_type}}
+                    </td>
+                    <td class="py-2 px-2 font-normal text-start flex gap-2">
+                        <a href="{% url 'production_details' production.id %}"
+                            class="w-fit flex items-center gap-2 rounded-full px-2 aspect-square bg-white shadow-md border text-blue-700">
+                            <iconify-icon icon="ep:right" width="20" height="20"></iconify-icon>
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
