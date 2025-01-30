@@ -15,7 +15,7 @@ function renderTopGrossing(rawData) {
       //   type: "datetime",
       categories: data.x,
       labels: {
-        show: true,
+        show: false,
       },
     },
     colors: ["#1F8537"],
