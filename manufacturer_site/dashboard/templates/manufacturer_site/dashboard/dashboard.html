@@ -6,10 +6,6 @@
 Dashboard
 {% endblock title %}
 
-{% block head %}
-<script src="{% static 'js/apexcharts.min.js' %}"></script>
-{% endblock head %}
-
 {% block content %}
 <div class="w-full relative flex flex-col gap-12">
 
@@ -31,33 +27,78 @@ Dashboard
         {% include './components/live_production_section.html' %}
     </section>
 
-    <!-- Inventory Metrics -->
-    <section class="w-full px-2 sm:px-4">
-        {% include './components/low_stock_section.html' %}
-    </section>
-
     <!-- Inventory Management -->
     <section class="w-full">
-        <div class="w-full py-3">
+        <!-- <div class="w-full py-3">
             <div class="w-full p-2 backdrop-blur-md rounded-xl bg-white/10 flex gap-4 items-center">
                 <div class="flex-1 border-y"></div>
-                <legend class="text-md font-medium uppercase">Production Cost Analysis</legend>
+                <legend class="text-md font-medium uppercase">Production</legend>
                 <div class="flex-1 border-y"></div>
             </div>
-        </div>
+        </div> -->
         <div class="w-full p-3 rounded-xl bg-[#65B5A320]">
             <div class="w-full" id="productionCostOverTime"></div>
         </div>
     </section>
 
     <!-- Sales Metrics -->
-    <!-- <section class="w-full">
-        <div class="w-full sticky top-0 py-3">
-            <div class="w-full py-3 px-4 backdrop-blur-md rounded-xl bg-white/10">
-                <legend class="text-md font-medium">Sales Metrics</legend>
+    <section class="w-full">
+        <!-- <div class="w-full py-3">
+            <div class="w-full p-2 backdrop-blur-md rounded-xl bg-white/10 flex gap-4 items-center">
+                <div class="flex-1 border-y"></div>
+                <legend class="text-md font-medium uppercase">Product Performance</legend>
+                <div class="flex-1 border-y"></div>
+            </div>
+        </div> -->
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="w-full p-3 rounded-xl bg-[#65B5A320]">
+                <div class="w-full" id="topGrossing"></div>
+            </div>
+            <div class="w-full p-3 rounded-xl bg-[#65B5A320]">
+                <div class="w-full" id="trendingProducts"></div>
             </div>
         </div>
-    </section> -->
+        {% if most_popular %}
+        <div class="mt-6 flex flex-wrap gap-3">
+            <!-- MOST POPULAR -->
+            <div class="w-full max-w-sm bg-gray-100 rounded-xl p-4">
+                <div class="w-fit px-3 py-1 text-[10px] bg-orange-700 text-white rounded-full">Most Popular</div>
+                <div class="w-full flex items-center gap-2 mt-3">
+                    <div class="w-[50px] aspect-square bg-gray-200 grid place-items-center rounded-lg overflow-hidden">
+                        {% if most_popular.image %}
+                        <img src="{{most_popular.image.url}}" alt="" class="w-full">
+                        {% endif %}
+                    </div>
+                    <div class="flex-1 font-medium">
+                        {{most_popular.product_color}} {{most_popular.product_type.name}}
+                        ({{most_popular.package.volume}} lts)'
+                    </div>
+                </div>
+            </div>
+
+            <!-- MOST PROFITABLE -->
+            <div class="w-full max-w-sm bg-gray-100 rounded-xl p-4">
+                <div class="w-fit px-3 py-1 text-[10px] bg-green-700 text-white rounded-full">Most Profitable</div>
+                <div class="w-full flex items-center gap-2 mt-3">
+                    <div class="w-[50px] aspect-square bg-gray-200 grid place-items-center rounded-lg overflow-hidden">
+                        {% if most_profitable.image %}
+                        <img src="{{most_profitable.image.url}}" alt="" class="w-full">
+                        {% endif %}
+                    </div>
+                    <div class="flex-1 font-medium">
+                        {{most_profitable.product_color}} {{most_profitable.product_type.name}}
+                        ({{most_profitable.package.volume}} lts)'
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- Inventory Metrics -->
+    <section class="w-full px-2 sm:px-4">
+        {% include './components/low_stock_section.html' %}
+    </section>
 
     <!-- Financial Metrics -->
     <!-- <section class="w-full">
@@ -89,54 +130,12 @@ Dashboard
 {% endblock content %}
 
 {% block scripts %}
+<script src="{% static 'js/apexcharts.min.js' %}"></script>
+<script src="{% static 'js/dashboard-utils/production_analysis.js' %}"></script>
+<script src="{% static 'js/dashboard-utils/product_performance.js' %}"></script>
 <script>
-    var productionCostOverTime = JSON.parse('{{production_cost_over_time|safe}}');
-    new ApexCharts(document.querySelector("#productionCostOverTime"), {
-        chart: {
-            type: 'area',
-            height: '350',
-        },
-        series: [
-            {
-                type: 'area',
-                data: productionCostOverTime.y,
-            },
-        ],
-        xaxis: {
-            type: 'datetime',
-            categories: productionCostOverTime.x
-        },
-        legend: {
-            show: true,
-            position: 'top',
-            horizontalAlign: 'left',
-        },
-        title: {
-            text: '',
-            margin: 20,
-            style: {
-                fontWeight: '600',
-                fontSize: '16',
-            },
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 2,
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        yaxis: {
-            show: true,
-            labels: {
-                formatter: function (value) {
-                    return Math.floor(value);
-                }
-            },
-        },
-        grid: {
-            show: false,
-        },
-    }).render();
+    renderProductionCostAnalysis(`{{production_cost_over_time|safe}}`);
+    renderTopGrossing(`{{top_selling_products|safe}}`);
+    renderTrendingProducts(`{{trending_products|safe}}`);
 </script>
 {% endblock scripts %}
