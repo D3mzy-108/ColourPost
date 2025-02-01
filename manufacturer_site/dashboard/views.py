@@ -42,6 +42,8 @@ def dashboard(request):
         'date_query': date_query,
         'date_filters': [
             ('7', '7 days'),
+            ('30', '30 days'),
+            ('90', '90 days'),
             ('mtd', 'This Month'),
             ('ytd', 'This Year'),
         ],
