@@ -4,7 +4,7 @@
     <div class="w-full py-3">
         <div class="w-full p-2 backdrop-blur-md rounded-xl bg-white/10 flex gap-4 items-center">
             <div class="flex-1 border-y"></div>
-            <legend class="text-md font-medium uppercase">Summary</legend>
+            <legend class="text-md font-medium uppercase">Business Metrics</legend>
             <div class="flex-1 border-y"></div>
         </div>
     </div>
@@ -12,37 +12,30 @@
     <div class="w-full flex overflow-auto md:grid md:grid-cols-3 gap-3 px-2 sm:px-4">
         <div
             class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
-            <span class="text-sm text-gray-700">Sales Revenue</span>
+            <span class="text-sm text-gray-700">Revenue</span>
             <legend class="text-lg font-semibold">
-                #{{summary.sales_revenue|floatformat:2|comma_separated}}
+                ₦{{summary.sales_revenue|floatformat:2|comma_separated}}
             </legend>
         </div>
         <div
             class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
-            <span class="text-sm text-gray-700">Operating Expenses</span>
+            <span class="text-sm text-gray-700">Expenses</span>
             <legend class="text-lg font-semibold">
-                #{{summary.ttl_expenses|floatformat:2|comma_separated}}
+                ₦{{summary.ttl_expenses|floatformat:2|comma_separated}}
             </legend>
         </div>
         <div
             class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
-            <span class="text-sm text-gray-700">Margins</span>
+            <span class="text-sm text-gray-700">Raw Materials</span>
             <legend class="text-lg font-semibold">
-                #{{summary.sales_revenue|subtract:summary.ttl_expenses|floatformat:2|comma_separated}}
+                ₦{{summary.ttl_stock_value|floatformat:2|comma_separated}}
             </legend>
         </div>
         <div
             class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
-            <span class="text-sm text-gray-700">Raw Materials Inventory</span>
+            <span class="text-sm text-gray-700">Finished Goods</span>
             <legend class="text-lg font-semibold">
-                #{{summary.ttl_stock_value|floatformat:2|comma_separated}}
-            </legend>
-        </div>
-        <div
-            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
-            <span class="text-sm text-gray-700">Products Inventory</span>
-            <legend class="text-lg font-semibold">
-                #{{summary.sellable_stock_value|floatformat:2|comma_separated}}
+                ₦{{summary.sellable_stock_value|floatformat:2|comma_separated}}
             </legend>
         </div>
         <div
@@ -51,7 +44,7 @@
             <div class="w-full md:w-fit flex max-sm:flex-col sm:gap-2 font-medium">
                 <div class="flex-1 flex text-md text-green-600 text-start mr-auto">
                     <div class="flex-1">
-                        #{{summary.ttl_batch_value|floatformat:2|comma_separated}}
+                        ₦{{summary.ttl_batch_value|floatformat:2|comma_separated}}
                     </div>
                     <span>
                         &blacktriangle;
@@ -59,13 +52,20 @@
                 </div>
                 <div class="flex-1 flex text-md text-red-600 text-start ml-auto">
                     <div class="flex-1">
-                        #{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
+                        ₦{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
                     </div>
                     <span>
                         &blacktriangledown;
                     </span>
                 </div>
             </div>
+        </div>
+        <div
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Operating Ratio</span>
+            <legend class="text-lg font-semibold">
+                {{summary.ttl_expenses|percentage_ratio:summary.sales_revenue|floatformat:2|comma_separated}}%
+            </legend>
         </div>
     </div>
 </div>
