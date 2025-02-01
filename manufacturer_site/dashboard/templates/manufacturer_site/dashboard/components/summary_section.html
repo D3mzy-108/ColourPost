@@ -11,46 +11,61 @@
 
     <div class="w-full flex overflow-auto md:grid md:grid-cols-3 gap-3 px-2 sm:px-4">
         <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
-            <span class="text-sm text-gray-700">Total Stock Value</span>
-            <legend class="text-lg font-semibold">
-                #{{summary.ttl_stock_value|floatformat:2|comma_separated}}
-            </legend>
-        </div>
-        <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
-            <span class="text-sm text-gray-700">Produced Batch Value</span>
-            <legend class="text-lg font-semibold">
-                #{{summary.ttl_batch_value|floatformat:2|comma_separated}}
-            </legend>
-        </div>
-        <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
-            <span class="text-sm text-gray-700">Produced Batch Cost</span>
-            <legend class="text-lg font-semibold">
-                #{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
-            </legend>
-        </div>
-        <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
-            <span class="text-sm text-gray-700">Sellable Stock Value</span>
-            <legend class="text-lg font-semibold">
-                #{{summary.sellable_stock_value|floatformat:2|comma_separated}}
-            </legend>
-        </div>
-        <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
             <span class="text-sm text-gray-700">Sales Revenue</span>
             <legend class="text-lg font-semibold">
                 #{{summary.sales_revenue|floatformat:2|comma_separated}}
             </legend>
         </div>
         <div
-            class="w-full max-md:min-w-[170px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] grid place-items-center place-content-center">
-            <span class="text-sm text-gray-700">Total Expenses</span>
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Operating Expenses</span>
             <legend class="text-lg font-semibold">
                 #{{summary.ttl_expenses|floatformat:2|comma_separated}}
             </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Margins</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.sales_revenue|subtract:summary.ttl_expenses|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Raw Materials Inventory</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.ttl_stock_value|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Products Inventory</span>
+            <legend class="text-lg font-semibold">
+                #{{summary.sellable_stock_value|floatformat:2|comma_separated}}
+            </legend>
+        </div>
+        <div
+            class="w-full max-md:min-w-[200px] flex-1 rounded-lg p-3 text-center bg-[#65B5A320] flex flex-col justify-center items-center gap-1">
+            <span class="text-sm text-gray-700">Cash Flow</span>
+            <div class="w-full md:w-fit flex max-sm:flex-col sm:gap-2 font-medium">
+                <div class="flex-1 flex text-md text-green-600 text-start mr-auto">
+                    <div class="flex-1">
+                        #{{summary.ttl_batch_value|floatformat:2|comma_separated}}
+                    </div>
+                    <span>
+                        &blacktriangle;
+                    </span>
+                </div>
+                <div class="flex-1 flex text-md text-red-600 text-start ml-auto">
+                    <div class="flex-1">
+                        #{{summary.ttl_batch_cost|floatformat:2|comma_separated}}
+                    </div>
+                    <span>
+                        &blacktriangledown;
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -9,4 +9,12 @@ def comma_separated(value):
     try:
         return "{:,}".format(float(f'{value}'))
     except (ValueError, TypeError):
-        return value  # Return the original value if it's not a number
+        return value
+
+@register.filter
+def subtract(value, num):
+    """Subtract two numbers"""
+    try:
+        return value - num
+    except (ValueError, TypeError):
+        return value

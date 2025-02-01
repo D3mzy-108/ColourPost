@@ -138,10 +138,22 @@ def _product_performance(sales, start_date, end_date, limit=10):
             trending['x'].append(
                 f'{product.product_color} {product.product_type.name} ({product.package.volume} lts)')
             trending['y'].append(product.order_count or 0)
+    else:
+        most_purchased = None
+        most_revenue = None
+
+    if most_purchased is not None:
+        mp = most_purchased.first()
+    else:
+        mp = None
+    if most_revenue is not None:
+        mr = most_revenue.first()
+    else:
+        mr = None
 
     return {
         'top_grossing': json.dumps(grossing),
         'trending': json.dumps(trending),
-        'most_popular': most_purchased.first() if most_purchased else None,
-        'most_profitable': most_revenue.first() if most_revenue else None,
+        'most_popular': mp,
+        'most_profitable': mr,
     }
