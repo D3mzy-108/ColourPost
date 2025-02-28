@@ -11,6 +11,7 @@ def comma_separated(value):
     except:
         return value
 
+
 @register.filter
 def subtract(value, num):
     """Subtract two numbers"""
@@ -19,10 +20,11 @@ def subtract(value, num):
     except (ValueError, TypeError):
         return value
 
+
 @register.filter
 def percentage_ratio(value, num):
     """Calculate the percentage ratio between two values"""
     try:
         return (value/num) * 100
-    except (ValueError, TypeError):
+    except (ValueError, TypeError, ZeroDivisionError):
         return value
