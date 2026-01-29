@@ -1,99 +1,131 @@
 {% load static %}
 
 <section class="px-8 bg-white">
-    <div class="w-full max-w-7xl mx-auto">
-        <h3 class="text-2xl text-center">How it Works</h3>
+  <div class="w-full max-w-7xl mx-auto">
+    <h3 class="text-2xl text-center">How it Works</h3>
 
-        <div class="w-full max-w-3xl mx-auto mt-8">
-            <p class="text-gray-600 text-md text-center">
-                ColourPost simplifies your paint manufacturing operations by organizing raw materials, production, and
-                sales in a seamless flow. Here's how to quickly get started to maximize the platform's potential:
-            </p>
-        </div>
-
-        <div class="w-full max-w-6xl mx-auto flex max-md:flex-col md:gap-8 items-center">
-            <!-- IMAGE -->
-            <div class="max-sm:max-w-sm md:flex-1 py-8 mx-auto">
-                <div class="w-full bg-black/70 p-[3px] rounded-xl overflow-hidden shadow-2xl border border-gray-100">
-                    <div class="flex items-center flex-none px-3 py-2">
-                        <div class="flex space-x-1.5">
-                            <div class="w-3 h-3 bg-red-400 rounded-full"></div>
-                            <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-                        </div>
-                    </div>
-                    <img src="{% static 'img/production-env-screenshot.png' %}" class="w-full rounded-md" />
-                </div>
-            </div>
-
-            <!-- STEPS -->
-            <div class="w-full max-w-md flex flex-col items-center gap-4 mt-8">
-                <div class="w-full rounded-xl bg-[#65B5A320] p-4 flex flex-col gap-1 text-start">
-                    <legend class="text-lg font-medium text-green-900">1. Sign In</legend>
-                    <p class="text-md text-gray-600"></p>
-                    <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
-                        <li>Go to the ColourPost login page.</li>
-                        <li>Enter your registered username and password.</li>
-                        <li>Click Sign In to access your dashboard.</li>
-                    </ul>
-                </div>
-
-                <div class="w-full rounded-xl bg-[#65B5A320] p-4 flex flex-col gap-1 text-start">
-                    <legend class="text-lg font-medium text-green-900">2. Set Up Raw Materials</legend>
-                    <p class="text-md text-gray-600"></p>
-                    <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
-                        <li>Navigate to "Inventory"</li>
-                        <li>Open the "Raw Materials" tab and click on "Add New Material" button.</li>
-                        <li>
-                            Fill in the required details (e.g Material Name, Quantity, and Unit Cost), and save the
-                            entry
-                        </li>
-                        <li>Repeat for all raw materials.</li>
-                    </ul>
-                </div>
-
-                <div class="w-full rounded-xl bg-[#65B5A320] p-4 flex flex-col gap-1 text-start">
-                    <legend class="text-lg font-medium text-green-900">3. Create Product Categories</legend>
-                    <p class="text-md text-gray-600"></p>
-                    <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
-                        <li>Navigate to "Production" and click the "Product Categories" button, then click on "Create
-                            Category".</li>
-                        <li>
-                            Provide the Category Name and the Raw Materials required to produce it, then save the entry.
-                        </li>
-                        <li>Add additional categories as needed to organize your products.</li>
-                    </ul>
-                </div>
-
-                <div class="w-full rounded-xl bg-[#65B5A320] p-4 flex flex-col gap-1 text-start">
-                    <legend class="text-lg font-medium text-green-900">4. Set Up Packaging Options</legend>
-                    <p class="text-md text-gray-600">
-                        From "Production", Navigate to "Packaging" tab, then click on "Add Packaging". Next, define
-                        packaging sizing and alias, and save the entry.
-                    </p>
-                    <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="w-full max-w-3xl mx-auto mt-8">
-            <p class="text-gray-600 text-md text-center">
-                Creating a production batch in ColourPost is a straightforward process. First, navigate to the
-                "Production" tab and click "Create New Batch." You'll then enter the batch details, including a name
-                (e.g., Batch001), the product category (e.g., Silk Paint), and select the raw materials used, specifying
-                the quantity of each. ColourPost automatically calculates the total batch cost based on these raw
-                material inputs. After saving the batch, you can view the finished products by navigating to the
-                "Inventory" tab and selecting the "Finished Product" section. Here, you can confirm the quantities
-                produced, and these finished products will automatically be reflected in your inventory.
-            </p>
-        </div>
+    <div class="w-full max-w-3xl mx-auto mt-8">
+      <p class="text-gray-600 text-md text-center">
+        ColourPost simplifies your paint manufacturing operations by organizing
+        raw materials, production, and sales in a seamless flow. Here's how to
+        quickly get started to maximize the platform's potential:
+      </p>
     </div>
+
+    <div
+      class="w-full max-w-6xl mx-auto flex max-md:flex-col md:gap-8 items-center"
+    >
+      <!-- IMAGE -->
+      <div class="max-sm:max-w-sm md:flex-1 py-8 mx-auto">
+        <div
+          class="w-full bg-black/70 p-[3px] rounded-xl overflow-hidden shadow-2xl border border-gray-100"
+        >
+          <div class="flex items-center flex-none px-3 py-2">
+            <div class="flex space-x-1.5">
+              <div class="w-3 h-3 bg-red-400 rounded-full"></div>
+              <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+              <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+            </div>
+          </div>
+          <img
+            src="{% static 'img/production-env-screenshot.png' %}"
+            class="w-full rounded-md"
+          />
+        </div>
+      </div>
+
+      <!-- STEPS -->
+      <div class="w-full max-w-md flex flex-col items-center gap-4 mt-8">
+        <div
+          class="w-full rounded-xl bg-[#183b7c20] p-4 flex flex-col gap-1 text-start"
+        >
+          <legend class="text-lg font-medium text-green-900">1. Sign In</legend>
+          <p class="text-md text-gray-600"></p>
+          <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
+            <li>Go to the ColourPost login page.</li>
+            <li>Enter your registered username and password.</li>
+            <li>Click Sign In to access your dashboard.</li>
+          </ul>
+        </div>
+
+        <div
+          class="w-full rounded-xl bg-[#183b7c20] p-4 flex flex-col gap-1 text-start"
+        >
+          <legend class="text-lg font-medium text-green-900">
+            2. Set Up Raw Materials
+          </legend>
+          <p class="text-md text-gray-600"></p>
+          <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
+            <li>Navigate to "Inventory"</li>
+            <li>
+              Open the "Raw Materials" tab and click on "Add New Material"
+              button.
+            </li>
+            <li>
+              Fill in the required details (e.g Material Name, Quantity, and
+              Unit Cost), and save the entry
+            </li>
+            <li>Repeat for all raw materials.</li>
+          </ul>
+        </div>
+
+        <div
+          class="w-full rounded-xl bg-[#183b7c20] p-4 flex flex-col gap-1 text-start"
+        >
+          <legend class="text-lg font-medium text-green-900">
+            3. Create Product Categories
+          </legend>
+          <p class="text-md text-gray-600"></p>
+          <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600">
+            <li>
+              Navigate to "Production" and click the "Product Categories"
+              button, then click on "Create Category".
+            </li>
+            <li>
+              Provide the Category Name and the Raw Materials required to
+              produce it, then save the entry.
+            </li>
+            <li>
+              Add additional categories as needed to organize your products.
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="w-full rounded-xl bg-[#183b7c20] p-4 flex flex-col gap-1 text-start"
+        >
+          <legend class="text-lg font-medium text-green-900">
+            4. Set Up Packaging Options
+          </legend>
+          <p class="text-md text-gray-600">
+            From "Production", Navigate to "Packaging" tab, then click on "Add
+            Packaging". Next, define packaging sizing and alias, and save the
+            entry.
+          </p>
+          <ul class="py-0 m-0 pl-4 instruction-list text-sm text-gray-600"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full max-w-3xl mx-auto mt-8">
+      <p class="text-gray-600 text-md text-center">
+        Creating a production batch in ColourPost is a straightforward process.
+        First, navigate to the "Production" tab and click "Create New Batch."
+        You'll then enter the batch details, including a name (e.g., Batch001),
+        the product category (e.g., Silk Paint), and select the raw materials
+        used, specifying the quantity of each. ColourPost automatically
+        calculates the total batch cost based on these raw material inputs.
+        After saving the batch, you can view the finished products by navigating
+        to the "Inventory" tab and selecting the "Finished Product" section.
+        Here, you can confirm the quantities produced, and these finished
+        products will automatically be reflected in your inventory.
+      </p>
+    </div>
+  </div>
 </section>
 
 <style>
-    ul.instruction-list li {
-        list-style-type: disc;
-    }
+  ul.instruction-list li {
+    list-style-type: disc;
+  }
 </style>

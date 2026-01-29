@@ -1,15 +1,22 @@
-<header class="fixed top-0 z-10 w-screen backdrop-blur-lg bg-white/70 pt-6 pb-3 sm:py-6 px-8">
-    <div class="w-full flex max-sm:flex-col sm:items-center px-4">
-        <a href="{% url 'home' %}">
-            <div class="w-fit logo flex items-center text-2xl scale-[1.2]">
-                {% include 'components/logo.html' %}
-                <h3>ColourPost</h3>
-            </div>
-        </a>
-        <a href="{% url 'store' %}"
-            class="ml-auto flex gap-2 text-[var(--highlight)] bg-[#65B5A320] px-4 py-2 rounded-full">
-            <iconify-icon icon="material-symbols-light:store-outline" width="24" height="24"></iconify-icon>
-            <span>Paint Shop</span>
-        </a>
-    </div>
+<header
+  class="fixed top-0 z-10 w-screen backdrop-blur-lg bg-white/70 pt-6 pb-3 sm:py-6 px-8"
+>
+  <div class="w-full flex max-sm:flex-col sm:items-center px-4">
+    <a href="{% url 'home' %}">
+      <div class="w-fit logo flex items-center text-2xl scale-[1.2]">
+        {% include 'components/logo.html' %}
+      </div>
+    </a>
+    <a
+      href="{% url 'store' %}"
+      class="ml-auto flex gap-2 text-[var(--highlight)] bg-[#183b7c20] px-4 py-2 rounded-full"
+    >
+      <iconify-icon
+        icon="material-symbols-light:store-outline"
+        width="24"
+        height="24"
+      ></iconify-icon>
+      <span>Paint Shop</span>
+    </a>
+  </div>
 </header>
