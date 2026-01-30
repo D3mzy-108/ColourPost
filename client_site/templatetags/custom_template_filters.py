@@ -6,10 +6,13 @@ register = Library()
 @register.filter
 def comma_separated(value):
     """Formats a number with commas as thousands separators."""
-    try:
-        return "{:,}".format(float(f'{value}'))
-    except:
-        return value
+    if value:
+        try:
+            return "{:,}".format(float(f'{value}'))
+        except:
+            return value
+    else:
+        return 0
 
 
 @register.filter

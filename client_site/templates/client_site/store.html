@@ -1,5 +1,13 @@
-{% extends 'base.html' %} {% load static %} {% block title %} Store {% endblock
-title %} {% block main %} {% include './components/header.html' %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Store
+{% endblock title %}
+
+{% block main %}
+
+{% include './components/header.html' %}
 
 <div class="w-full bg-[#DDD] pt-12 relative">
   <div class="w-full flex flex-col gap-24 bg-white">
@@ -40,8 +48,9 @@ title %} {% block main %} {% include './components/header.html' %}
   <div class="w-full fixed bottom-4 right-4 flex justify-end">
     <a
       href="{% url 'checkout' %}"
-      class="absolute bottom-0 right-0 px-3 py-2 bg-[#183b7c40] text-[var(--highlight)] rounded-full mt-2 flex items-center gap-1 relative backdrop-blur-sm"
+      class="absolute bottom-0 right-0 px-3 py-2 bg-[#183b7c40] text-[var(--highlight)] rounded-full mt-2 backdrop-blur-sm"
     >
+    <div class="relative flex items-center gap-1">
       <iconify-icon
         icon="material-symbols-light:shopping-cart-checkout"
         width="24"
@@ -55,6 +64,7 @@ title %} {% block main %} {% include './components/header.html' %}
         {{cart|length}}
       </span>
       {% endif %}
+    </div>
     </a>
   </div>
 </div>

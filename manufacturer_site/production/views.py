@@ -286,7 +286,7 @@ def packaging_details(request, production_id):
     if _active_steps(production_id) < 3:
         messages.warning(
             request, 'Set the volume produced in this batch')
-        return redirect('packaging_details', production_id)
+        return redirect('batch_details', production_id)
 
     total_recorded_volume = 0
     for item in production.batch.batch_items.all():

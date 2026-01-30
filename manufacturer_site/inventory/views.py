@@ -28,6 +28,7 @@ def product_inventory(request):
         'products': products,
         'inventory_summary': inventory_summary,
     }
+    print(context)
     return render(request, 'manufacturer_site/inventory/product_inventory.html', context)
 
 
